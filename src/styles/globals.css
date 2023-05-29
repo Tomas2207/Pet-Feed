@@ -4,5 +4,9 @@
 @tailwind components;
 @tailwind utilities;
 body {
-  background-color: yellow;
+  /* background-color: rgb(109, 179, 109); */
+  background-color: #10b981;
+  /* background-color: rgb(8, 8, 139); */
+  /* background-color: rgb(255, 230, 0); */
+  overflow-x: hidden;
 }
