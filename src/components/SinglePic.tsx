@@ -20,8 +20,8 @@ type Props = {
 
 const SinglePic = ({ pic, changePic }: Props) => {
   return (
-    <div className="shadow-lg shadow-black bg-white p-2 rounded-md">
-      <div className="flex gap-2 my-4">
+    <div className="shadow-lg shadow-black bg-white rounded-md h-auto w-[30rem]">
+      <div className="flex gap-2 my-4 p-2">
         <div className="relative h-12 w-12 rounded-xl overflow-hidden">
           <Image
             fill
@@ -35,8 +35,8 @@ const SinglePic = ({ pic, changePic }: Props) => {
           <p className="text-neutral-600">12 Hours Ago</p>
         </div>
       </div>
-      <p className="text-lg font-light px-2 pb-4">{pic.description}</p>
-      <div className="h-[30rem] w-[28rem] relative overflow-hidden rounded-lg">
+      <p className="text-md px-4 pb-4">{pic.description}</p>
+      <div className="h-[32rem] w-full relative overflow-hidden">
         <Image
           src={pic.picture}
           fill
@@ -46,7 +46,7 @@ const SinglePic = ({ pic, changePic }: Props) => {
         />
       </div>
       <div className="p-4 rounded-b-md ">
-        <div className="w-full h-[0.1px] bg-gray-500 bg-opacity-20 my-4" />
+        <div className="w-full h-[0.1px] bg-gray-500 bg-opacity-20 mb-4" />
         <div className="flex justify-between my-2 items-center">
           <AiOutlineLike className="z-2 relative text-2xl" />
           <AiOutlineComment className="z-2 relative text-2xl" />

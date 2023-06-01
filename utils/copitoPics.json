@@ -14,5 +14,9 @@
   {
     "picture": "/copito4.jpeg",
     "description": "Baby"
+  },
+  {
+    "picture": "/copito4.jpeg",
+    "description": "In this example, the ContainerHeightDeterminer component receives the imageUrl prop, which is used to display the image. The container is styled using Tailwind CSS classes, and the h-auto class is applied to the image to adjust its height automatically based on the width. In this example, the ContainerHeightDeterminer component receives the imageUrl prop, which is used to display the image. The container is styled using Tailwind CSS classes, and the h-auto class is applied to the image to adjust its height automatically based on the width."
   }
 ]

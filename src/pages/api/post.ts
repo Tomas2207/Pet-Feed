@@ -35,7 +35,6 @@ export default async function handler(
       const posts = await Post.find();
       res.json({ posts });
       break;
-
     default:
       break;
   }

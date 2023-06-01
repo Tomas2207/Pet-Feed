@@ -3,7 +3,7 @@ import ZoomPic from '../components/ZoomPic';
 import { useState } from 'react';
 import ProfileInfo from '../components/ProfileInfo';
 import SinglePic from '@/components/SinglePic';
-import Navbar from '@/components/Navbar';
+import Navbar from '@/components/Navbar/Navbar';
 
 export default function Home() {
   const [currentPic, setCurrentPic] = useState({ src: '', desc: '' });
