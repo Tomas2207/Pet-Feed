@@ -7,7 +7,7 @@ type Props = {
 
 const AddPost = ({ setOpenNewPost }: Props) => {
   return (
-    <div className="w-[34rem] flex border gap-2 p-2 mb-6 rounded-md bg-white shadow-lg">
+    <div className="w-[35rem] flex border gap-2 p-2 mb-6 rounded-md bg-white shadow-lg">
       <div className="relative w-14 h-14 rounded-md overflow-hidden">
         <Image
           src="/copito.jpeg"
@@ -17,7 +17,7 @@ const AddPost = ({ setOpenNewPost }: Props) => {
         />
       </div>
       <button
-        className="p-2 border rounded-md flex-1 bg-emerald-500 text-white font-bold"
+        className="p-2 border rounded-md flex-1 bg-emerald-600 text-white"
         onClick={() => setOpenNewPost(true)}
       >
         Create Post

@@ -39,7 +39,7 @@ const NavbarMenu = ({ changeNav }: Props) => {
         <div className="absolute top-16 right-64 bg-black text-white flex flex-col w-60 rounded-md overflow-hidden">
           <Link
             href="/profile"
-            className="py-4 hover:bg-neutral-800 cursor-pointer"
+            className="pt-4 pb-1 hover:bg-neutral-800 cursor-pointer"
           >
             <div className="flex items-end gap-2 justify-center my-2">
               <div className="h-16 w-16 relative">
@@ -57,12 +57,6 @@ const NavbarMenu = ({ changeNav }: Props) => {
                 </button>
               </div>
             </div>
-          </Link>
-          <Link
-            href="/"
-            className="py-4 hover:bg-neutral-800 cursor-pointer text-center"
-          >
-            Home
           </Link>
           <button className="py-4 hover:bg-neutral-800 cursor-pointer">
             Sign Out

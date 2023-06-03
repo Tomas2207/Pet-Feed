@@ -5,7 +5,7 @@ const ProfileInfo = () => {
   return (
     <div className="flex items-center pb-10 mt-2">
       {/* Profile Image */}
-      <div className="border-4 border-black h-64 w-64 relative flex items-center justify-center rounded-full">
+      <div className="border-4 border-emerald-600 h-64 w-64 relative flex items-center justify-center rounded-full">
         <div className="h-60 w-60 relative rounded-full overflow-hidden">
           <Image
             src="/copito.jpeg"
@@ -35,7 +35,7 @@ const ProfileInfo = () => {
           </div>
         </div>
         {/* ----------- */}
-        <button className="bg-black text-white px-4 py-2 rounded-lg">
+        <button className="bg-emerald-600 text-white px-4 py-2 rounded-lg">
           Follow
         </button>
       </div>

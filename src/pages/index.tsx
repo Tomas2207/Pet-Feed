@@ -8,8 +8,21 @@ import NewPost from '@/components/NewPost';
 import ExploreProfiles from '@/components/ExploreProfiles';
 import AddPost from '@/components/AddPost';
 import SideProfile from '@/components/SideProfile';
+import { HiArrowCircleUp } from 'react-icons/hi';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 const Index = () => {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  if (session) {
+    console.log(session);
+    if (!session.user?.name) {
+      router.push('/form');
+    }
+  }
+
   const changePic = (src: string, desc: string) => {
     console.log('yes');
   };
@@ -32,7 +45,7 @@ const Index = () => {
 
           <div className="w-[80%] h-[0.1px] bg-gray-500 bg-opacity-20 mb-6" />
 
-          <div className="gap-5 grid grid-cols-2">
+          <div className="gap-5 grid">
             {copitoPics.map((pic, i) => (
               <SinglePic key={i} pic={pic} changePic={changePic} />
             ))}

@@ -1,0 +1,34 @@
+{
+  "reviews": [
+    {
+      "title": "Hassle-Free Booking Experience",
+      "review": "I recently booked a stay through this website and couldnt be happier with the experience. The site was easy to use, and I was able to quickly find a great deal on a hotel room that met all of my needs. The booking process was smooth and hassle-free...",
+      "image": "https://res.cloudinary.com/dbejjbpof/image/upload/v1680690258/next-booking/pexels-monstera-5876695_dxbrep.jpg",
+      "name": "Sarah J."
+    },
+    {
+      "title": "Easy-to-Use Site with Great Selection",
+      "review": "I had a fantastic experience using this travel website to book my vacation rental. The site had a wide variety of options to choose from, and I was able to easily compare prices and amenities to find the perfect rental for my trip.",
+      "image": "https://res.cloudinary.com/dbejjbpof/image/upload/v1680690258/next-booking/pexels-andrea-piacquadio-837358_fne9as.jpg",
+      "name": "Mark D."
+    },
+    {
+      "title": "Fantastic Experience Booking a Family Vacation",
+      "review": "I recently used this travel website to book a stay at a resort for a family vacation, and I couldn't be happier with the outcome. The site was user-friendly, and I was able to easily browse and compare different resorts before making my selection. ",
+      "image": "https://res.cloudinary.com/dbejjbpof/image/upload/v1680693779/pexels-josh-willink-1157395_ymqzza.jpg",
+      "name": "Cameron B."
+    },
+    {
+      "title": "Top-Rated Hotel at a Great Price",
+      "review": "I had an excellent experience using this travel website to book my hotel stay. The site was easy to navigate, and I was able to find a great deal on a room at a top-rated hotel in the area. The booking process was quick and painless, and I appreciated the option to pay securely through the website.",
+      "image": "https://res.cloudinary.com/dbejjbpof/image/upload/v1680690258/next-booking/pexels-muhd-emir-3796217_kka4op.jpg",
+      "name": "Emily S."
+    },
+    {
+      "title": "Perfect Weekend Getaway Rental",
+      "review": "I recently used this travel website to book a vacation rental for a weekend getaway with friends, and I couldn't have been happier with the experience. The site had a wide variety of rentals to choose from, and I was able to easily filter my search to find options that met my specific needs. ",
+      "image": "https://res.cloudinary.com/dbejjbpof/image/upload/v1680690257/next-booking/pexels-rachel-claire-5490276_kuhqyt.jpg",
+      "name": "John S."
+    }
+  ]
+}

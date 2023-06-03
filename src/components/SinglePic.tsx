@@ -20,7 +20,7 @@ type Props = {
 
 const SinglePic = ({ pic, changePic }: Props) => {
   return (
-    <div className="shadow-lg shadow-black bg-white rounded-md h-auto w-[30rem]">
+    <div className="shadow-lg shadow-black bg-white rounded-md h-auto w-[35rem]">
       <div className="flex gap-2 my-4 p-2">
         <div className="relative h-12 w-12 rounded-xl overflow-hidden">
           <Image

@@ -35,21 +35,26 @@ const Navbar = () => {
       }
     >
       {/* ---Right------ */}
-      <div className="flex items-end font-bold relative h-12 w-12 overflow-hidden rounded-md">
+      <Link
+        href="/"
+        className="flex items-end font-bold relative h-12 w-12 overflow-hidden rounded-md"
+      >
         <Image src="/logo.png" fill alt="logo" className="object-cover" />
-      </div>
+      </Link>
       {/* -------------- */}
 
       {/* -----Middle------ */}
 
       <div className="text-3xl flex space-x-2 text-neutral-500 flex-1 mx-12 justify-around items-center">
-        <AiFillHome
-          className={
-            !changeNav
-              ? 'hover:text-emerald-600 transition-all duration-150 cursor-pointer ease-in-out'
-              : 'text-white hover:text-emerald-600 transition-all duration-150 cursor-pointer ease-in-out'
-          }
-        />
+        <Link href="/">
+          <AiFillHome
+            className={
+              !changeNav
+                ? 'hover:text-emerald-600 transition-all duration-150 cursor-pointer ease-in-out'
+                : 'text-white hover:text-emerald-600 transition-all duration-150 cursor-pointer ease-in-out'
+            }
+          />
+        </Link>
 
         <AiFillMessage
           className={
@@ -78,13 +83,18 @@ const Navbar = () => {
       {/* ----------------- */}
       {/* --- left ------ */}
       <div className="flex items-center justify-center mr-2 gap-2">
-        <AiFillBell
-          className={
-            !changeNav
-              ? 'text-4xl text-neutral-500 hover:text-emerald-600 transition-all duration-150 cursor-pointer ease-in-out'
-              : 'text-4xl text-white hover:text-emerald-600 transition-all duration-150 cursor-pointer ease-in-out'
-          }
-        />
+        <div className="relative">
+          <p className="absolute right-[-5px] top-[-5px] bg-emerald-600 rounded-full px-2 text-white">
+            0
+          </p>
+          <AiFillBell
+            className={
+              !changeNav
+                ? 'text-4xl text-neutral-500 hover:text-emerald-600 transition-all duration-150 cursor-pointer ease-in-out'
+                : 'text-4xl text-white hover:text-emerald-600 transition-all duration-150 cursor-pointer ease-in-out'
+            }
+          />
+        </div>
         <NavbarMenu changeNav={changeNav} />
       </div>
       {/*  */}
