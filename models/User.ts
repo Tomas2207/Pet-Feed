@@ -13,6 +13,14 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  // followers: {
+  //   type: Number,
+  //   required: true,
+  // },
+  // following: {
+  //   type: Number,
+  //   required: true,
+  // },
 });
 
 const User = models.User || model('User', UserSchema);

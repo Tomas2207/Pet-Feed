@@ -16,9 +16,9 @@ const Form = () => {
 
   if (session) {
     console.log('yo', session);
-    if (session.user?.name) {
-      router.push('/');
-    }
+    // if (session.user?.name) {
+    //   router.push('/');
+    // }
   }
 
   const handleFileInputChange = (e: React.FormEvent<HTMLInputElement>) => {
@@ -62,9 +62,10 @@ const Form = () => {
       console.log('res', res);
       update({
         user: {
+          id: res.updatedUser._id,
           name: petName,
           description: description,
-          image: res.update.image,
+          image: res.updatedUser.image,
         },
       });
       setDisableBtn(false);

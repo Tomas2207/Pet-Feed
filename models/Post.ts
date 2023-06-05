@@ -2,6 +2,11 @@ import mongoose, { Schema, model, models } from 'mongoose';
 
 const postSchema = new mongoose.Schema(
   {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
     img: {
       type: String,
       required: true,

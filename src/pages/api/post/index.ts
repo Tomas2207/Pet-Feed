@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import cloudinary from '../../../utils/cloudinary';
-import connectMongo from '../../../utils/connectMongo';
-import Post from '../../../models/Post';
+import cloudinary from '../../../../utils/cloudinary';
+import connectMongo from '../../../../utils/connectMongo';
+import Post from '../../../../models/Post';
 
 export default async function handler(
   req: NextApiRequest,
@@ -17,11 +17,12 @@ export default async function handler(
         const uploadedResponse = await cloudinary.uploader.upload(fileStr, {
           folder: 'pet-media',
         });
-        console.log('response', uploadedResponse.secure_url);
+        console.log('response', req.body.userId);
 
         const newPost = Post.create({
+          userId: req.body.userId,
           img: uploadedResponse.secure_url,
-          description: 'test',
+          description: req.body.description,
         });
 
         res.json({ newPost });

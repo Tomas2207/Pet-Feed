@@ -13,14 +13,16 @@ import {
   AiOutlineMessage,
 } from 'react-icons/ai';
 import { FiSearch } from 'react-icons/fi';
+import { signIn, useSession } from 'next-auth/react';
 
 const Navbar = () => {
-  const [openDropdown, setOpenDropdown] = useState(false);
   const [changeNav, setChangeNav] = useState(false);
 
   const changeNavBg = () => {
     window.scrollY >= 100 ? setChangeNav(true) : setChangeNav(false);
   };
+
+  const { data: session } = useSession();
 
   useEffect(() => {
     window.addEventListener('scroll', changeNavBg);
@@ -82,22 +84,30 @@ const Navbar = () => {
 
       {/* ----------------- */}
       {/* --- left ------ */}
-      <div className="flex items-center justify-center mr-2 gap-2">
-        <div className="relative">
-          <p className="absolute right-[-5px] top-[-5px] bg-emerald-600 rounded-full px-2 text-white">
-            0
-          </p>
-          <AiFillBell
-            className={
-              !changeNav
-                ? 'text-4xl text-neutral-500 hover:text-emerald-600 transition-all duration-150 cursor-pointer ease-in-out'
-                : 'text-4xl text-white hover:text-emerald-600 transition-all duration-150 cursor-pointer ease-in-out'
-            }
-          />
+      {session ? (
+        <div className="flex items-center justify-center mr-2 gap-2">
+          <div className="relative">
+            <p className="absolute right-[-5px] top-[-5px] bg-emerald-600 rounded-full px-2 text-white">
+              0
+            </p>
+            <AiFillBell
+              className={
+                !changeNav
+                  ? 'text-4xl text-neutral-500 hover:text-emerald-600 transition-all duration-150 cursor-pointer ease-in-out'
+                  : 'text-4xl text-white hover:text-emerald-600 transition-all duration-150 cursor-pointer ease-in-out'
+              }
+            />
+          </div>
+          <NavbarMenu changeNav={changeNav} />
         </div>
-        <NavbarMenu changeNav={changeNav} />
-      </div>
-      {/*  */}
+      ) : (
+        <button
+          className="bg-emerald-600 text-white px-4 py-2 rounded-md"
+          onClick={() => signIn()}
+        >
+          Sign In
+        </button>
+      )}
     </div>
   );
 };

@@ -11,16 +11,31 @@ import SideProfile from '@/components/SideProfile';
 import { HiArrowCircleUp } from 'react-icons/hi';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import connectMongo from '../../utils/connectMongo';
+import Post from '../../models/Post';
 
-const Index = () => {
+type Posts = {
+  posts: {
+    img: string;
+    description: string;
+    createdAt: Date;
+    updatedAt: Date;
+  }[];
+};
+
+const Index = ({ posts }: Posts) => {
   const { data: session, status } = useSession();
+
   const router = useRouter();
 
+  posts = posts.reverse();
+
   if (session) {
-    console.log(session);
     if (!session.user?.name) {
       router.push('/form');
     }
+    console.log('as', session.user.id);
+    fetch(`/api/user?id=${session.user.email}`);
   }
 
   const changePic = (src: string, desc: string) => {
@@ -31,13 +46,13 @@ const Index = () => {
   const [openZoom, setOpenZoom] = useState(false);
 
   return (
-    <main className="mx-[2rem] flex flex-col items-center shadow-xl shadow-black relative min-h-screen bg-neutral-200">
+    <main className="mx-[4rem] flex flex-col items-center shadow-xl shadow-black relative min-h-screen bg-neutral-200">
       {openNewPost ? <NewPost open={setOpenNewPost} /> : null}
       <Navbar />
 
-      <div className="w-[80%] h-[0.1px] bg-gray-500 bg-opacity-20 my-6" />
+      <div className="w-[70%] h-[0.1px] bg-gray-500 bg-opacity-20 my-6" />
 
-      <div className="flex w-full justify-around">
+      <div className="flex w-full px-28 justify-around">
         <SideProfile />
         <div className="flex flex-col items-center">
           {/* Add Post */}
@@ -46,7 +61,7 @@ const Index = () => {
           <div className="w-[80%] h-[0.1px] bg-gray-500 bg-opacity-20 mb-6" />
 
           <div className="gap-5 grid">
-            {copitoPics.map((pic, i) => (
+            {posts.map((pic, i) => (
               <SinglePic key={i} pic={pic} changePic={changePic} />
             ))}
           </div>
@@ -61,3 +76,17 @@ const Index = () => {
 };
 
 export default Index;
+
+export const getStaticProps = async () => {
+  await connectMongo();
+
+  const posts = JSON.parse(JSON.stringify(await Post.find()));
+
+  console.log(posts);
+
+  return {
+    props: {
+      posts: posts,
+    },
+  };
+};

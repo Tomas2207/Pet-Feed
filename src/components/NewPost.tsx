@@ -1,3 +1,4 @@
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { AiFillLike, AiOutlineComment, AiOutlineLike } from 'react-icons/ai';
@@ -14,6 +15,9 @@ const NewPost = ({ open }: Props) => {
   const [selectedFile, setSelectedFile] = useState();
   const [previewSource, setPreviewSource] = useState('');
   const [disableBtn, setDisableBtn] = useState(false);
+  const [description, setDescription] = useState('');
+
+  const { data: session } = useSession();
 
   const handleFileInputChange = (e: React.FormEvent<HTMLInputElement>) => {
     const fileInput = e.target as HTMLInputElement;
@@ -44,7 +48,11 @@ const NewPost = ({ open }: Props) => {
     try {
       await fetch('/api/post', {
         method: 'POST',
-        body: JSON.stringify({ data: base64EncodedImage }),
+        body: JSON.stringify({
+          data: base64EncodedImage,
+          description: description,
+          userId: session?.user.id,
+        }),
         headers: { 'Content-type': 'application/json' },
       });
       open(false);
@@ -83,6 +91,8 @@ const NewPost = ({ open }: Props) => {
               autoFocus
               className="px-2 py-2"
               placeholder="Something in mind?"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             />
             <div className="flex gap-2 mb-2">
               <label

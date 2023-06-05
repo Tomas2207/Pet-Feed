@@ -12,29 +12,40 @@ export default async function handler(
   switch (req.method) {
     case 'PATCH':
       try {
-        const fileStr = req.body.img;
-        const uploadedResponse = await cloudinary.uploader.upload(fileStr, {
-          folder: 'pet-media',
-        });
+        let uploadedResponse;
 
-        console.log(req.body);
+        if (req.body.img) {
+          const fileStr = req.body.img;
+          uploadedResponse = await cloudinary.uploader.upload(fileStr, {
+            folder: 'pet-media',
+          });
 
-        const updatedUser = await User.updateOne({ email: req.body.email }, [
+          await User.updateOne({ email: req.body.email }, [
+            {
+              $set: {
+                description: req.body.description,
+                name: req.body.petName,
+                image: uploadedResponse.secure_url,
+              },
+            },
+          ]);
+        }
+
+        await User.updateOne({ email: req.body.email }, [
           {
             $set: {
               description: req.body.description,
               name: req.body.petName,
-              image: uploadedResponse.secure_url,
             },
           },
         ]);
 
+        const updatedUser = await User.findOne({ email: req.body.email });
+
+        console.log(updatedUser);
+
         res.json({
-          update: {
-            description: req.body.description,
-            name: req.body.petName,
-            image: uploadedResponse.secure_url,
-          },
+          updatedUser,
         });
       } catch (error) {
         console.error(error);
@@ -43,7 +54,9 @@ export default async function handler(
       break;
 
     case 'GET':
-      const posts = await User.find();
+      console.log('query', req.query);
+
+      const posts = await User.findOne({ email: req.query.id });
       res.json({ posts });
       break;
     default:

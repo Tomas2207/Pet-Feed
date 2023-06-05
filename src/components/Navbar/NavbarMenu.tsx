@@ -1,3 +1,4 @@
+import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';
@@ -8,6 +9,8 @@ type Props = {
 };
 
 const NavbarMenu = ({ changeNav }: Props) => {
+  const { data: session } = useSession();
+
   const [openDropdown, setOpenDropdown] = useState(false);
   return (
     <div
@@ -19,7 +22,7 @@ const NavbarMenu = ({ changeNav }: Props) => {
     >
       <div className="relative h-10 w-10 rounded-full overflow-hidden">
         <Image
-          src="/copito.jpeg"
+          src={session?.user.image as string}
           fill
           className="object-cover"
           alt="nav-profile"
@@ -58,7 +61,10 @@ const NavbarMenu = ({ changeNav }: Props) => {
               </div>
             </div>
           </Link>
-          <button className="py-4 hover:bg-neutral-800 cursor-pointer">
+          <button
+            className="py-4 hover:bg-neutral-800 cursor-pointer"
+            onClick={() => signOut()}
+          >
             Sign Out
           </button>
         </div>
