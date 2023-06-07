@@ -41,7 +41,7 @@ export default function ProfilePage({ profile, posts }: Profile) {
   };
 
   return (
-    <main className="mx-[12rem] flex flex-col items-center shadow-xl shadow-black relative bg-neutral-200 min-h-screen ">
+    <main className="flex flex-col items-center shadow-xl shadow-black relative bg-neutral-200 min-h-screen ">
       <Navbar />
       {openZoom ? (
         <ZoomPic
@@ -50,12 +50,23 @@ export default function ProfilePage({ profile, posts }: Profile) {
           open={setOpenZoom}
         />
       ) : null}
-      <ProfileInfo profile={user} />
-      <div className="w-[40rem] h-[2px] bg-gray-500 bg-opacity-20 mb-12" />
-      <div className="gap-2 grid grid-cols-2">
-        {posts.reverse().map((pic, i) => (
-          <SinglePic key={i} pic={pic} changePic={changePic} />
-        ))}
+      <div className="w-full sm:w-auto flex flex-col lg:flex-row gap-6">
+        <ProfileInfo profile={user} />
+
+        <div className="mt-16">
+          <div className="text-neutral-800 flex gap-2 border border-b-emerald-600 w-fit pb-2 mx-1">
+            <p>Posts</p>
+            <p className="bg-emerald-600 px-2 rounded-md text-white">
+              {posts?.length}
+            </p>
+          </div>
+          <div className="w-full h-[1px] bg-gray-500 bg-opacity-20 mb-6" />
+          <div className="gap-2 grid 2xl:grid-cols-2">
+            {posts.reverse().map((pic, i) => (
+              <SinglePic key={i} pic={pic} changePic={changePic} />
+            ))}
+          </div>
+        </div>
       </div>
     </main>
   );

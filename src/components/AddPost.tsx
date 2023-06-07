@@ -7,7 +7,7 @@ type Props = {
 
 const AddPost = ({ setOpenNewPost }: Props) => {
   return (
-    <div className="w-[35rem] flex border gap-2 p-2 mb-6 rounded-md bg-white shadow-lg">
+    <div className="w-full sm:w-[35rem] flex border gap-2 p-2 mb-6 rounded-md bg-white border-neutral-300">
       <div className="relative w-14 h-14 rounded-md overflow-hidden">
         <Image
           src="/copito.jpeg"

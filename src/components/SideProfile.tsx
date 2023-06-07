@@ -9,19 +9,14 @@ const SideProfile = () => {
   let profile;
 
   if (session) {
-    profile = {
-      userName: session.user.name,
-      desc: session.user.description,
-      picture: session.user.image,
-    };
   }
 
   return (
-    <div className="h-fit w-[23rem] bg-white px-4 rounded-md sticky top-20 flex flex-col items-center justify-center text-center shadow-lg shadow-neutral-600">
-      <div className="flex gap-6 mb-4 font-bold items-end">
+    <div className="h-fit w-[23rem] bg-white px-4 rounded-md sticky top-20 hidden lg:flex flex-col items-center justify-center text-center border border-neutral-300">
+      <div className="flex gap-6 mb-4 items-end">
         {session ? (
           <div>
-            <p className="text-emerald-600 text-3xl">5000</p>
+            <p className="text-emerald-600 text-2xl font-bold">5000</p>
             <p>Followers</p>
           </div>
         ) : null}
@@ -40,7 +35,7 @@ const SideProfile = () => {
         {/* ------------ */}
         {session ? (
           <div>
-            <p className="text-emerald-600 text-3xl">1000</p>
+            <p className="text-emerald-600 text-2xl font-bold">1000</p>
             <p>Following</p>
           </div>
         ) : null}
@@ -52,10 +47,10 @@ const SideProfile = () => {
           <p className="text-neutral-600 my-4">{session.user.description}</p>
         </div>
       ) : null}
-      <div className="w-full h-[1px] bg-neutral-800 bg-opacity-20 my-4" />
+      <div className="w-full h-[1px] bg-neutral-800 bg-opacity-20 mb-3" />
       <Link
         href={session ? `/profile/${session?.user.id}` : '/api/auth/signin'}
-        className="bg-emerald-600 w-full py-2 mb-4 rounded-md text-white"
+        className="bg-emerald-600 w-full py-3 mb-3 rounded-md text-white"
       >
         {session ? 'My Profile' : 'Sign In'}
       </Link>

@@ -6,7 +6,7 @@ import { SlOptions } from 'react-icons/sl';
 
 const ExploreProfiles = () => {
   return (
-    <div className="h-fit w-[23rem] bg-white px-4 rounded-md sticky top-20 pb-4 shadow-lg shadow-neutral-600">
+    <div className="hidden xl:block h-fit min-w-[24rem] bg-white px-4 rounded-md sticky top-20 pb-4 border border-neutral-300">
       <h2 className="font-bold self-start mt-6 mb-2 text-lg text-neutral-500 px-6">
         Explore Profiles
       </h2>

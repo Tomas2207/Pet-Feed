@@ -15,7 +15,6 @@ const EditProfile = ({ profile, setOpenForm }: Props) => {
   const [fileInputState, setFileInputState] = useState();
   const [previewSource, setPreviewSource] = useState('');
   const [disableBtn, setDisableBtn] = useState(false);
-  const [description, setDescription] = useState('');
 
   const { data: session, update } = useSession();
 
@@ -81,7 +80,10 @@ const EditProfile = ({ profile, setOpenForm }: Props) => {
   };
 
   return (
-    <form className="flex gap-8 items-center" onSubmit={handleSubmitFile}>
+    <form
+      className="flex flex-col gap-8 items-center"
+      onSubmit={handleSubmitFile}
+    >
       <div className="border-4 border-emerald-600 h-64 w-64 relative flex items-center justify-center rounded-full">
         <label
           htmlFor="picture"
@@ -107,7 +109,7 @@ const EditProfile = ({ profile, setOpenForm }: Props) => {
         <input
           type="text"
           placeholder="Name...."
-          className="px-2 py-1 bg-transparent border border-neutral-400 rounded-md font-bold"
+          className="px-2 py-1 bg-transparent border border-neutral-400 rounded-md font-bold text-center"
           value={profileState.name as string}
           onChange={(e) =>
             setProfileState({
@@ -119,7 +121,7 @@ const EditProfile = ({ profile, setOpenForm }: Props) => {
         <input
           type="text"
           placeholder="Description...."
-          className="px-2 py-1 bg-transparent border border-neutral-400 rounded-md text-neutral-600"
+          className="px-2 py-1 bg-transparent border border-neutral-400 rounded-md text-neutral-600 text-center"
           value={profileState.description}
           onChange={(e) =>
             setProfileState({
@@ -128,7 +130,7 @@ const EditProfile = ({ profile, setOpenForm }: Props) => {
             })
           }
         />
-        <div className="flex justify-around gap-2">
+        <div className="flex justify-around gap-2 mb-2">
           <button
             className="bg-neutral-300 flex-1 rounded-md"
             onClick={(e) => setOpenForm(false)}

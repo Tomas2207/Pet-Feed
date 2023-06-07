@@ -28,7 +28,7 @@ type Props = {
 
 const SinglePic = ({ pic, changePic }: Props) => {
   return (
-    <div className="shadow-lg shadow-black bg-white rounded-md h-auto w-[35rem]">
+    <div className="bg-white rounded-md h-auto w-full sm:w-[35rem] border border-neutral-300">
       <div className="flex gap-2 my-4 p-2">
         <div className="relative h-12 w-12 rounded-xl overflow-hidden">
           <Image
@@ -46,7 +46,7 @@ const SinglePic = ({ pic, changePic }: Props) => {
         </div>
       </div>
       <p className="text-md px-4 pb-4 break-all">{pic.description}</p>
-      <div className="h-[32rem] relative overflow-hidden mx-2  rounded-md">
+      <div className="h-[32rem] relative overflow-hidden sm:mx-2 sm:rounded-md">
         <Image
           src={pic.img}
           fill

@@ -32,8 +32,8 @@ const Navbar = () => {
     <div
       className={
         !changeNav
-          ? 'flex justify-between w-screen items-center sticky top-0 z-[99] bg-white py-2 shadow-lg px-[15rem]'
-          : 'flex justify-between w-screen items-center sticky top-0 z-[99] bg-neutral-800 py-2 shadow-lg px-[15rem]'
+          ? 'flex justify-between w-screen items-center sticky top-0 z-[99] py-2 border-b border-neutral-300 bg-white px-2 sm:px-[2rem] xl:px-[15rem]'
+          : 'flex justify-between w-screen items-center sticky top-0 z-[99] bg-neutral-800 py-2 border-b border-neutral-300 px-2 sm:px-[2rem] xl:px-[15rem]'
       }
     >
       {/* ---Right------ */}
@@ -47,7 +47,7 @@ const Navbar = () => {
 
       {/* -----Middle------ */}
 
-      <div className="text-3xl flex space-x-2 text-neutral-500 flex-1 mx-12 justify-around items-center">
+      <div className="text-3xl hidden md:flex space-x-2 text-neutral-500 flex-1 mx-12 justify-around items-center">
         <Link href="/">
           <AiFillHome
             className={
@@ -75,18 +75,23 @@ const Navbar = () => {
         <div className="flex items-center justify-center gap-2">
           <input
             type="text"
-            className="border-2 rounded-md text-lg px-2 w-[30rem] py-1 outline-none"
+            className="border-2 rounded-md text-lg px-2 lg:w-[30rem] py-1 outline-none"
             placeholder="search..."
           />
           <FiSearch />
         </div>
       </div>
+      <input
+        type="text"
+        className="border-2 rounded-md text-lg px-2 py-1 outline-none md:hidden w-[50%]"
+        placeholder="search..."
+      />
 
       {/* ----------------- */}
       {/* --- left ------ */}
       {session ? (
         <div className="flex items-center justify-center mr-2 gap-2">
-          <div className="relative">
+          <div className="relative hidden sm:block">
             <p className="absolute right-[-5px] top-[-5px] bg-emerald-600 rounded-full px-2 text-white">
               0
             </p>

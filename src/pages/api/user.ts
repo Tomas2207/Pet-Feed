@@ -54,10 +54,8 @@ export default async function handler(
       break;
 
     case 'GET':
-      console.log('query', req.query);
-
-      const posts = await User.findOne({ email: req.query.id });
-      res.json({ posts });
+      const currentUser = await User.findOne({ email: req.query.id });
+      res.json({ currentUser });
       break;
     default:
       break;

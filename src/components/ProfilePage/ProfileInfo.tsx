@@ -43,9 +43,9 @@ const ProfileInfo = ({ profile }: Profile) => {
   }, [session]);
 
   return (
-    <div className="py-10 mt-2">
+    <div className="pt-6 border border-neutral-300 h-fit w-full lg:w-[23rem] bg-white rounded-md mt-2 lg:sticky top-20 z-[2]">
       {!openForm ? (
-        <div className="flex items-center">
+        <div className="flex flex-col items-center">
           {/* Profile Image */}
           <div className="border-4 border-emerald-600 h-64 w-64 relative flex items-center justify-center rounded-full">
             <div className="h-60 w-60 relative rounded-full overflow-hidden">
@@ -59,7 +59,7 @@ const ProfileInfo = ({ profile }: Profile) => {
           </div>
           {/* ------------- */}
           {/* Profile Info */}
-          <div className="w-64 text-center flex flex-col gap-2 my-4">
+          <div className="w-[85%] text-center flex flex-col gap-2 my-4">
             <p className="text-2xl font-bold ">{profileState.name}</p>
             <p className="text-neutral-600">{profileState.description}</p>
             {/* Followers */}
@@ -74,6 +74,7 @@ const ProfileInfo = ({ profile }: Profile) => {
               </div>
             </div>
             {/* ----------- */}
+            <div className="bg-neutral-300 h-[1px] my-2" />
             {myProfile ? (
               <button
                 className="bg-emerald-600 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 pr-2"

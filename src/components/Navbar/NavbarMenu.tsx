@@ -39,7 +39,7 @@ const NavbarMenu = ({ changeNav }: Props) => {
         />
       </div>
       {openDropdown ? (
-        <div className="absolute top-16 right-64 bg-black text-white flex flex-col w-60 rounded-md overflow-hidden">
+        <div className="absolute top-20 right-6 xl:right-64 bg-black text-white flex flex-col w-60 rounded-md overflow-hidden">
           <Link
             href="/profile"
             className="pt-4 pb-1 hover:bg-neutral-800 cursor-pointer"
