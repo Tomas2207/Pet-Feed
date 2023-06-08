@@ -19,6 +19,10 @@ TimeAgo.addDefaultLocale(en);
 
 type Props = {
   pic: {
+    userId: {
+      name: string;
+      image: string;
+    };
     img: string;
     description: string;
     createdAt: Date;
@@ -27,19 +31,21 @@ type Props = {
 };
 
 const SinglePic = ({ pic, changePic }: Props) => {
+  console.log('pic', pic);
+
   return (
-    <div className="bg-white rounded-md h-auto w-full sm:w-[35rem] border border-neutral-300">
+    <div className="bg-white rounded-xl h-auto w-full sm:w-[35rem] border border-neutral-300">
       <div className="flex gap-2 my-4 p-2">
         <div className="relative h-12 w-12 rounded-xl overflow-hidden">
           <Image
             fill
-            src="/copito.jpeg"
+            src={pic.userId.image}
             className="object-cover"
             alt="mini-profile"
           />
         </div>
         <div>
-          <h2 className="font-bold">Copito</h2>
+          <h2 className="font-bold">{pic.userId.name}</h2>
           <p className="text-neutral-600">
             <ReactTimeAgo date={pic.createdAt} locale="en-US" />
           </p>

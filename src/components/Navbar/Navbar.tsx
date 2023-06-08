@@ -33,7 +33,7 @@ const Navbar = () => {
       className={
         !changeNav
           ? 'flex justify-between w-screen items-center sticky top-0 z-[99] py-2 border-b border-neutral-300 bg-white px-2 sm:px-[2rem] xl:px-[15rem]'
-          : 'flex justify-between w-screen items-center sticky top-0 z-[99] bg-neutral-800 py-2 border-b border-neutral-300 px-2 sm:px-[2rem] xl:px-[15rem]'
+          : 'flex justify-between w-screen items-center sticky top-0 z-[99] bg-neutral-800 py-2 border-b border-neutral-800 px-2 sm:px-[2rem] xl:px-[15rem]'
       }
     >
       {/* ---Right------ */}
@@ -41,7 +41,7 @@ const Navbar = () => {
         href="/"
         className="flex items-end font-bold relative h-12 w-12 overflow-hidden rounded-md"
       >
-        <Image src="/logo.png" fill alt="logo" className="object-cover" />
+        <Image src="/app-logo.png" fill alt="logo" className="object-cover" />
       </Link>
       {/* -------------- */}
 
@@ -52,8 +52,8 @@ const Navbar = () => {
           <AiFillHome
             className={
               !changeNav
-                ? 'hover:text-emerald-600 transition-all duration-150 cursor-pointer ease-in-out'
-                : 'text-white hover:text-emerald-600 transition-all duration-150 cursor-pointer ease-in-out'
+                ? 'hover:text-teal-600 transition-all duration-150 cursor-pointer ease-in-out'
+                : 'text-white hover:text-teal-600 transition-all duration-150 cursor-pointer ease-in-out'
             }
           />
         </Link>
@@ -61,15 +61,15 @@ const Navbar = () => {
         <AiFillMessage
           className={
             !changeNav
-              ? 'hover:text-emerald-600 transition-all duration-150 cursor-pointer ease-in-out'
-              : 'text-white hover:text-emerald-600 transition-all duration-150 cursor-pointer ease-in-out'
+              ? 'hover:text-teal-600 transition-all duration-150 cursor-pointer ease-in-out'
+              : 'text-white hover:text-teal-600 transition-all duration-150 cursor-pointer ease-in-out'
           }
         />
         <AiFillHeart
           className={
             !changeNav
-              ? 'hover:text-emerald-600 transition-all duration-150 cursor-pointer ease-in-out'
-              : 'text-white hover:text-emerald-600 transition-all duration-150 cursor-pointer ease-in-out'
+              ? 'hover:text-teal-600 transition-all duration-150 cursor-pointer ease-in-out'
+              : 'text-white hover:text-teal-600 transition-all duration-150 cursor-pointer ease-in-out'
           }
         />
         <div className="flex items-center justify-center gap-2">
@@ -92,14 +92,14 @@ const Navbar = () => {
       {session ? (
         <div className="flex items-center justify-center mr-2 gap-2">
           <div className="relative hidden sm:block">
-            <p className="absolute right-[-5px] top-[-5px] bg-emerald-600 rounded-full px-2 text-white">
+            <p className="absolute right-[-5px] top-[-5px] bg-teal-600 rounded-full px-2 text-white">
               0
             </p>
             <AiFillBell
               className={
                 !changeNav
-                  ? 'text-4xl text-neutral-500 hover:text-emerald-600 transition-all duration-150 cursor-pointer ease-in-out'
-                  : 'text-4xl text-white hover:text-emerald-600 transition-all duration-150 cursor-pointer ease-in-out'
+                  ? 'text-4xl text-neutral-500 hover:text-teal-600 transition-all duration-150 cursor-pointer ease-in-out'
+                  : 'text-4xl text-white hover:text-teal-600 transition-all duration-150 cursor-pointer ease-in-out'
               }
             />
           </div>
@@ -107,7 +107,7 @@ const Navbar = () => {
         </div>
       ) : (
         <button
-          className="bg-emerald-600 text-white px-4 py-2 rounded-md"
+          className="bg-teal-600 text-white px-4 py-2 rounded-md"
           onClick={() => signIn()}
         >
           Sign In

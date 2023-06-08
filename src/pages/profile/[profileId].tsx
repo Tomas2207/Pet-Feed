@@ -20,6 +20,10 @@ type Profile = {
   };
 
   posts: {
+    userId: {
+      name: string;
+      image: string;
+    };
     img: string;
     description: string;
     createdAt: Date;
@@ -54,9 +58,9 @@ export default function ProfilePage({ profile, posts }: Profile) {
         <ProfileInfo profile={user} />
 
         <div className="mt-16">
-          <div className="text-neutral-800 flex gap-2 border border-b-emerald-600 w-fit pb-2 mx-1">
+          <div className="text-neutral-800 flex gap-2 border border-b-teal-600 w-fit pb-2 mx-1">
             <p>Posts</p>
-            <p className="bg-emerald-600 px-2 rounded-md text-white">
+            <p className="bg-teal-600 px-2 rounded-md text-white">
               {posts?.length}
             </p>
           </div>
@@ -66,6 +70,11 @@ export default function ProfilePage({ profile, posts }: Profile) {
               <SinglePic key={i} pic={pic} changePic={changePic} />
             ))}
           </div>
+          {posts.length === 0 ? (
+            <div className="w-[50vw] px-6 text-neutral-600">
+              {user.name} has no posts yet
+            </div>
+          ) : null}
         </div>
       </div>
     </main>
@@ -80,7 +89,9 @@ export const getServerSideProps = async ({ query }: any) => {
 
   const profile = JSON.parse(JSON.stringify(await User.findOne({ _id: id })));
 
-  const posts = JSON.parse(JSON.stringify(await Post.find({ userId: id })));
+  const posts = JSON.parse(
+    JSON.stringify(await Post.find({ userId: id }).populate('userId'))
+  );
 
   return {
     props: {

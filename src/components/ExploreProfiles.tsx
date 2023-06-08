@@ -6,8 +6,8 @@ import { SlOptions } from 'react-icons/sl';
 
 const ExploreProfiles = () => {
   return (
-    <div className="hidden xl:block h-fit min-w-[24rem] bg-white px-4 rounded-md sticky top-20 pb-4 border border-neutral-300">
-      <h2 className="font-bold self-start mt-6 mb-2 text-lg text-neutral-500 px-6">
+    <div className="hidden xl:block h-fit min-w-[24rem] bg-white px-1 rounded-xl sticky top-20 pb-4 border border-neutral-300">
+      <h2 className="font-bold self-start mt-6 mb-2 text-xl text-neutral-500 px-6">
         Explore Profiles
       </h2>
       <div className="flex flex-col justify-around w-full gap-2">
@@ -36,7 +36,7 @@ const ExploreProfiles = () => {
                   <p className="text-lg font-bold text-neutral-600">Copito</p>
                   <p className="text-neutral-500 text-sm">Active Recently</p>
                 </div>
-                <button className="bg-emerald-600 text-white text-lg py-1 px-2 rounded-md ml-auto">
+                <button className="border border-neutral-300 bg-white py-2 px-6 rounded-xl ml-auto text-neutral-600">
                   Follow
                 </button>
               </div>

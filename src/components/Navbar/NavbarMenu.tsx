@@ -32,8 +32,8 @@ const NavbarMenu = ({ changeNav }: Props) => {
         <CgMenuRound
           className={
             !openDropdown
-              ? 'text-4xl hover:rotate-90 transition-all duration-150 ease-out cursor-pointer hover:text-emerald-600'
-              : 'rotate-90 text-4xl cursor-pointer text-emerald-600'
+              ? 'text-4xl hover:rotate-90 transition-all duration-150 ease-out cursor-pointer hover:text-teal-600'
+              : 'rotate-90 text-4xl cursor-pointer text-teal-600'
           }
           onClick={() => setOpenDropdown(!openDropdown)}
         />
@@ -47,14 +47,14 @@ const NavbarMenu = ({ changeNav }: Props) => {
             <div className="flex items-end gap-2 justify-center my-2">
               <div className="h-16 w-16 relative">
                 <Image
-                  src="/copito.jpeg"
+                  src={session?.user.image as string}
                   fill
                   className="object-cover rounded-md"
                   alt="dropdown profile"
                 />
               </div>
               <div>
-                <p className="font-bold">Copito</p>
+                <p className="font-bold">{session?.user.name}</p>
                 <button className="rounded-md border border-white px-2 py-1">
                   View Profile
                 </button>

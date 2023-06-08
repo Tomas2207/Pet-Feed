@@ -84,7 +84,7 @@ const EditProfile = ({ profile, setOpenForm }: Props) => {
       className="flex flex-col gap-8 items-center"
       onSubmit={handleSubmitFile}
     >
-      <div className="border-4 border-emerald-600 h-64 w-64 relative flex items-center justify-center rounded-full">
+      <div className="border-4 border-teal-600 h-64 w-64 relative flex items-center justify-center rounded-full">
         <label
           htmlFor="picture"
           className="h-60 w-60 relative rounded-full overflow-hidden"
@@ -139,7 +139,7 @@ const EditProfile = ({ profile, setOpenForm }: Props) => {
           </button>
           <button
             type="submit"
-            className="bg-emerald-600 flex-1 py-2 rounded-md text-white"
+            className="bg-teal-600 flex-1 py-2 rounded-md text-white"
           >
             Accept
           </button>

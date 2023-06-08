@@ -87,9 +87,9 @@ const Form = () => {
         <form className="flex flex-col gap-4" onSubmit={handleSubmitFile}>
           <label
             htmlFor="picture"
-            className="bg-emerald-600 w-56 h-56 rounded-full mx-auto flex items-center justify-center cursor-pointer relative overflow-hidden"
+            className="bg-teal-600 w-56 h-56 rounded-full mx-auto flex items-center justify-center cursor-pointer relative overflow-hidden"
           >
-            <p className="bg-emerald-700 px-1 py-1 rounded-md text-white">
+            <p className="bg-teal-700 px-1 py-1 rounded-md text-white">
               Profile Picture
             </p>
             {previewSource ? (
@@ -131,8 +131,8 @@ const Form = () => {
             type="submit"
             className={
               !disableBtn
-                ? 'bg-emerald-600 py-4 rounded-md text-white text-lg my-4'
-                : 'bg-emerald-600 bg-opacity-40 py-4 rounded-md text-white text-lg my-4'
+                ? 'bg-teal-600 py-4 rounded-md text-white text-lg my-4'
+                : 'bg-teal-600 bg-opacity-40 py-4 rounded-md text-white text-lg my-4'
             }
             disabled={disableBtn}
           >

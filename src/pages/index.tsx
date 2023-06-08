@@ -16,6 +16,10 @@ import Post from '../../models/Post';
 
 type Posts = {
   posts: {
+    userId: {
+      name: string;
+      image: string;
+    };
     img: string;
     description: string;
     createdAt: Date;
@@ -95,7 +99,9 @@ export default Index;
 export const getStaticProps = async () => {
   await connectMongo();
 
-  const posts = JSON.parse(JSON.stringify(await Post.find()));
+  const posts = JSON.parse(
+    JSON.stringify(await Post.find().populate('userId'))
+  );
 
   console.log(posts);
 

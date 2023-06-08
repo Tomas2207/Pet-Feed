@@ -6,7 +6,7 @@ const SideBanner = () => {
     <div className="h-[99%] w-[40%] mx-2 rounded-md text-center relative overflow-hidden flex">
       <div className="h-20 w-20 absolute z-[99] top-2 left-2">
         <Image
-          src="/logo.png"
+          src="/app-logo.png"
           fill
           className="object-cover rounded-md"
           alt="logo"
@@ -21,7 +21,7 @@ const SideBanner = () => {
           alt="form dog"
         />
       </div>
-      <div className="bg-emerald-600 h-full w-[60%] z-[2] flex justify-center">
+      <div className="bg-teal-600 h-full w-[60%] z-[2] flex justify-center">
         <div className="flex flex-col gap-6 my-60">
           <h2 className="text-5xl font-semibold text-white">
             Start using Pet Feed

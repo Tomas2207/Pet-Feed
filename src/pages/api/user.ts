@@ -61,3 +61,11 @@ export default async function handler(
       break;
   }
 }
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '10mb',
+    },
+  },
+};

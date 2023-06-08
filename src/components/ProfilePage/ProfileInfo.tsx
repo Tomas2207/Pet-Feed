@@ -47,14 +47,16 @@ const ProfileInfo = ({ profile }: Profile) => {
       {!openForm ? (
         <div className="flex flex-col items-center">
           {/* Profile Image */}
-          <div className="border-4 border-emerald-600 h-64 w-64 relative flex items-center justify-center rounded-full">
-            <div className="h-60 w-60 relative rounded-full overflow-hidden">
-              <Image
-                src={profileState.image}
-                fill
-                className="object-cover hover:scale-110 transition duration-150 ease-in-out"
-                alt="profile"
-              />
+          <div>
+            <div className="border-4 border-teal-600 h-64 w-64 relative flex items-center justify-center rounded-full">
+              <div className="h-60 w-60 relative rounded-full overflow-hidden">
+                <Image
+                  src={profileState.image}
+                  fill
+                  className="object-cover hover:scale-110 transition duration-150 ease-in-out"
+                  alt="profile"
+                />
+              </div>
             </div>
           </div>
           {/* ------------- */}
@@ -66,25 +68,25 @@ const ProfileInfo = ({ profile }: Profile) => {
             <div className="flex gap-5 text-center justify-center">
               <div>
                 <p className="font-bold">Followers</p>
-                <p>5000</p>
+                <p className="text-teal-600 font-bold text-2xl">5000</p>
               </div>
               <div>
                 <p className="font-bold">Following</p>
-                <p>1000</p>
+                <p className="text-teal-600 font-bold text-2xl">1000</p>
               </div>
             </div>
             {/* ----------- */}
             <div className="bg-neutral-300 h-[1px] my-2" />
             {myProfile ? (
               <button
-                className="bg-emerald-600 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 pr-2"
+                className="bg-teal-600 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 pr-2"
                 onClick={(e) => setOpenForm(true)}
               >
                 <p>Edit Profile</p>
                 <MdModeEditOutline />
               </button>
             ) : (
-              <button className="bg-emerald-600 text-white px-4 py-2 rounded-lg">
+              <button className="bg-teal-600 text-white px-4 py-2 rounded-lg">
                 Follow
               </button>
             )}

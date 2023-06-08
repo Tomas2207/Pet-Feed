@@ -12,7 +12,6 @@ type Props = {
 
 const NewPost = ({ open }: Props) => {
   const [fileInputState, setFileInputState] = useState();
-  const [selectedFile, setSelectedFile] = useState();
   const [previewSource, setPreviewSource] = useState('');
   const [disableBtn, setDisableBtn] = useState(false);
   const [description, setDescription] = useState('');
@@ -70,13 +69,13 @@ const NewPost = ({ open }: Props) => {
             <div className="relative h-12 w-12 rounded-xl overflow-hidden">
               <Image
                 fill
-                src="/copito.jpeg"
+                src={session?.user.image as string}
                 className="object-cover"
                 alt="mini-profile"
               />
             </div>
             <div>
-              <h2 className="font-bold">Copito</h2>
+              <h2 className="font-bold">{session?.user.name}</h2>
             </div>
             <RxCrossCircled
               className="bg-white text-4xl rounded-full cursor-pointer transition duration-1000 hover:rotate-180 mr-0 ml-auto"
@@ -97,7 +96,7 @@ const NewPost = ({ open }: Props) => {
             <div className="flex gap-2 mb-2">
               <label
                 htmlFor="image"
-                className="bg-emerald-600 rounded-md px-4 py-2 text-white text-center flex-1 cursor-pointer"
+                className="bg-teal-600 rounded-md px-4 py-2 text-white text-center flex-1 cursor-pointer"
               >
                 Choose File
               </label>
@@ -118,7 +117,7 @@ const NewPost = ({ open }: Props) => {
                 }
                 disabled={disableBtn}
               >
-                Submit
+                Post
               </button>
             </div>
           </form>
