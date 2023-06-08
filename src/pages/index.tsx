@@ -13,8 +13,16 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import connectMongo from '../../utils/connectMongo';
 import Post from '../../models/Post';
+import User from '../../models/User';
+import { ObjectId } from 'mongodb';
 
-type Posts = {
+type Props = {
+  users: {
+    _id: ObjectId;
+    name: string;
+    image: string;
+  }[];
+
   posts: {
     userId: {
       name: string;
@@ -27,7 +35,7 @@ type Posts = {
   }[];
 };
 
-const Index = ({ posts }: Posts) => {
+const Index = ({ posts, users }: Props) => {
   const { data: session, status, update } = useSession();
 
   const router = useRouter();
@@ -38,12 +46,16 @@ const Index = ({ posts }: Posts) => {
     const response = await fetch(`/api/user?id=${session!.user.email}`);
     const data = await response.json();
 
+    console.log('d', data);
+
     update({
       user: {
         id: data.currentUser._id,
         name: data.currentUser.name,
         description: data.currentUser.description,
         image: data.currentUser.image,
+        followers: data.currentUser.followers,
+        following: data.currentUser.following,
       },
     });
   };
@@ -87,7 +99,7 @@ const Index = ({ posts }: Posts) => {
           {/* -------- */}
         </div>
         {/*---Explore--- */}
-        <ExploreProfiles />
+        <ExploreProfiles profiles={users} fetchUser={fetchUser} />
         {/* ------------- */}
       </div>
     </main>
@@ -100,14 +112,17 @@ export const getStaticProps = async () => {
   await connectMongo();
 
   const posts = JSON.parse(
-    JSON.stringify(await Post.find().populate('userId'))
+    JSON.stringify(await Post.find().populate({ path: 'userId', model: User }))
   );
+
+  const users = JSON.parse(JSON.stringify(await User.find()));
 
   console.log(posts);
 
   return {
     props: {
       posts: posts,
+      users: users,
     },
   };
 };

@@ -66,6 +66,8 @@ const Form = () => {
           name: petName,
           description: description,
           image: res.updatedUser.image,
+          following: 0,
+          followers: 0,
         },
       });
       setDisableBtn(false);

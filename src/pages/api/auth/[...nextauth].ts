@@ -17,8 +17,8 @@ export const authOptions: NextAuthOptions = {
           email: profile.email,
           image: profile.avatar_url,
           description: '',
-          //   stays: [],
-          //   lists: [{ name: 'My Stays' }],
+          following: 0,
+          followers: 0,
         };
       },
     }),
@@ -32,8 +32,8 @@ export const authOptions: NextAuthOptions = {
           email: profile.email,
           image: '',
           description: '',
-          //   stays: [],
-          //   lists: [{ name: 'My Stays' }],
+          following: [],
+          followers: [],
         };
       },
     }),
@@ -50,14 +50,18 @@ export const authOptions: NextAuthOptions = {
         token.name = session.user.name;
         token.picture = session.user.image;
         token.description = session.user.description;
+        token.followers = session.user.followers;
+        token.following = session.user.following;
       }
       return token;
     },
     session({ session, token }) {
       if (token && session.user) {
-        console.log('sesh', token.id);
+        console.log('sesh', token);
         session.user.description = token.description;
         session.user.id = token.id;
+        session.user.followers = token.followers;
+        session.user.following = token.following;
       }
       return session;
     },

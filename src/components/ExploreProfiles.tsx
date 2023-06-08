@@ -3,21 +3,46 @@ import React from 'react';
 import copitoPics from '../../utils/copitoPics.json';
 import { TbArrowForwardUp } from 'react-icons/tb';
 import { SlOptions } from 'react-icons/sl';
+import { ObjectId } from 'mongodb';
+import { useSession } from 'next-auth/react';
 
-const ExploreProfiles = () => {
+type Props = {
+  profiles: {
+    _id: ObjectId;
+    name: string;
+    image: string;
+  }[];
+  fetchUser: Function;
+};
+
+const ExploreProfiles = ({ profiles, fetchUser }: Props) => {
+  const { data: session } = useSession();
+
+  const addFollowing = async (id: ObjectId) => {
+    await fetch(`/api/follow`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        otherId: id,
+        hostId: session?.user.id,
+      }),
+      headers: { 'Content-type': 'application/json' },
+    });
+
+    fetchUser();
+  };
   return (
     <div className="hidden xl:block h-fit min-w-[24rem] bg-white px-1 rounded-xl sticky top-20 pb-4 border border-neutral-300">
       <h2 className="font-bold self-start mt-6 mb-2 text-xl text-neutral-500 px-6">
         Explore Profiles
       </h2>
       <div className="flex flex-col justify-around w-full gap-2">
-        {copitoPics.map((pic, i) => (
+        {profiles.map((pic, i) => (
           <div
             key={i}
             className="flex gap-4 relative h-20 rounded-md overflow-hidden hover:h-80 transition-all duration-500 ease-in-out group"
           >
             <Image
-              src={pic.img}
+              src={pic.image}
               fill
               className="object-cover absolute"
               alt="explore-profile"
@@ -26,19 +51,30 @@ const ExploreProfiles = () => {
               <div className="flex gap-2 items-center mt-4">
                 <div className="h-16 w-16 relative">
                   <Image
-                    src={pic.img}
+                    src={pic.image}
                     fill
                     className="object-cover absolute rounded-full"
                     alt="explore-profile"
                   />
                 </div>
                 <div>
-                  <p className="text-lg font-bold text-neutral-600">Copito</p>
+                  <p className="text-lg font-bold text-neutral-600">
+                    {pic.name}
+                  </p>
                   <p className="text-neutral-500 text-sm">Active Recently</p>
                 </div>
-                <button className="border border-neutral-300 bg-white py-2 px-6 rounded-xl ml-auto text-neutral-600">
-                  Follow
-                </button>
+                {!session?.user.following.includes(pic._id) ? (
+                  <button
+                    className="border border-neutral-300 bg-white py-2 px-6 rounded-xl ml-auto text-neutral-600"
+                    onClick={() => addFollowing(pic._id)}
+                  >
+                    {session?.user.id === pic._id.toString() ? 'Me' : 'Follow'}
+                  </button>
+                ) : (
+                  <button className="border border-neutral-300 bg-teal-600 py-2 px-6 rounded-xl ml-auto text-white">
+                    Following
+                  </button>
+                )}
               </div>
             </div>
           </div>

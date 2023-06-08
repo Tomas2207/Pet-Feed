@@ -68,11 +68,15 @@ const ProfileInfo = ({ profile }: Profile) => {
             <div className="flex gap-5 text-center justify-center">
               <div>
                 <p className="font-bold">Followers</p>
-                <p className="text-teal-600 font-bold text-2xl">5000</p>
+                <p className="text-teal-600 font-bold text-2xl">
+                  {session?.user.followers.length}
+                </p>
               </div>
               <div>
                 <p className="font-bold">Following</p>
-                <p className="text-teal-600 font-bold text-2xl">1000</p>
+                <p className="text-teal-600 font-bold text-2xl">
+                  {session?.user.following.length}
+                </p>
               </div>
             </div>
             {/* ----------- */}

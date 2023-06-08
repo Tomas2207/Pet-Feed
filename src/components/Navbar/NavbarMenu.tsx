@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { CgMenuRound } from 'react-icons/cg';
+import { FaSignOutAlt } from 'react-icons/fa';
 
 type Props = {
   changeNav: Boolean;
@@ -41,7 +42,7 @@ const NavbarMenu = ({ changeNav }: Props) => {
       {openDropdown ? (
         <div className="absolute top-20 right-6 xl:right-64 bg-black text-white flex flex-col w-60 rounded-md overflow-hidden">
           <Link
-            href="/profile"
+            href={`/profile/${session?.user.id}`}
             className="pt-4 pb-1 hover:bg-neutral-800 cursor-pointer"
           >
             <div className="flex items-end gap-2 justify-center my-2">
@@ -62,10 +63,11 @@ const NavbarMenu = ({ changeNav }: Props) => {
             </div>
           </Link>
           <button
-            className="py-4 hover:bg-neutral-800 cursor-pointer"
+            className="py-4 hover:bg-neutral-800 cursor-pointer flex items-center justify-center gap-4"
             onClick={() => signOut()}
           >
-            Sign Out
+            <p>Sign Out</p>
+            <FaSignOutAlt className="text-xl" />
           </button>
         </div>
       ) : null}

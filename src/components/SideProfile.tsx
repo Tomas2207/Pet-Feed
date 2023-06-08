@@ -17,7 +17,9 @@ const SideProfile = () => {
         {session ? (
           <div className="font-bold">
             <p>Followers</p>
-            <p className="text-teal-600 text-2xl">5000</p>
+            <p className="text-teal-600 text-2xl">
+              {session.user.followers.length}
+            </p>
           </div>
         ) : null}
         {/* Picture */}
@@ -35,7 +37,9 @@ const SideProfile = () => {
         {session ? (
           <div className="font-bold">
             <p>Following</p>
-            <p className="text-teal-600 text-2xl">1000</p>
+            <p className="text-teal-600 text-2xl">
+              {session.user.following.length}
+            </p>
           </div>
         ) : null}
       </div>

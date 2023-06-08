@@ -1,7 +1,7 @@
-import mongoose, { model, models } from 'mongoose';
+import mongoose, { model, models, Schema } from 'mongoose';
 
 const UserSchema = new mongoose.Schema({
-  userName: {
+  name: {
     type: String,
     required: true,
   },
@@ -13,16 +13,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  // followers: {
-  //   type: Number,
-  //   required: true,
-  // },
-  // following: {
-  //   type: Number,
-  //   required: true,
-  // },
+  followers: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  following: [{ type: Schema.Types.ObjectId, ref: 'User' }],
 });
 
-const User = models.User || model('User', UserSchema);
+const User = mongoose.models.User || mongoose.model('User', UserSchema);
 
 export default User;
