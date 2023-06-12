@@ -13,17 +13,31 @@ export default async function handler(
     case 'POST':
       try {
         const fileStr = req.body.data;
-        console.log(fileStr);
-        const uploadedResponse = await cloudinary.uploader.upload(fileStr, {
-          folder: 'pet-media',
-        });
-        console.log('response', req.body.userId);
 
-        const newPost = Post.create({
-          userId: req.body.userId,
-          img: uploadedResponse.secure_url,
-          description: req.body.description,
-        });
+        let newPost;
+
+        if (req.body.type === 'image') {
+          const uploadedResponse = await cloudinary.uploader.upload(fileStr, {
+            folder: 'pet-media',
+          });
+
+          newPost = Post.create({
+            userId: req.body.userId,
+            img: uploadedResponse.secure_url,
+            description: req.body.description,
+          });
+        } else if (req.body.type === 'video') {
+          const uploadedResponse = await cloudinary.uploader.upload(fileStr, {
+            folder: 'pet-media',
+            resource_type: 'video',
+          });
+
+          newPost = Post.create({
+            userId: req.body.userId,
+            video: uploadedResponse.secure_url,
+            description: req.body.description,
+          });
+        }
 
         res.json({ newPost });
       } catch (error) {
@@ -44,7 +58,7 @@ export default async function handler(
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: '10mb',
+      sizeLimit: '20mb',
     },
   },
 };

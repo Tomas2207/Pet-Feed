@@ -15,10 +15,9 @@ const Form = () => {
   const router = useRouter();
 
   if (session) {
-    console.log('yo', session);
-    // if (session.user?.name) {
-    //   router.push('/');
-    // }
+    if (session.user?.name) {
+      router.push('/');
+    }
   }
 
   const handleFileInputChange = (e: React.FormEvent<HTMLInputElement>) => {
@@ -59,18 +58,18 @@ const Form = () => {
         headers: { 'Content-type': 'application/json' },
       });
       const res = await updateUser.json();
-      console.log('res', res);
+
       update({
         user: {
           id: res.updatedUser._id,
           name: petName,
           description: description,
           image: res.updatedUser.image,
-          following: 0,
-          followers: 0,
+          following: [],
+          followers: [],
         },
       });
-      setDisableBtn(false);
+      // setDisableBtn(false);
     } catch (error) {
       console.error(error);
     }

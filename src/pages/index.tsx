@@ -1,20 +1,17 @@
 import Navbar from '@/components/Navbar/Navbar';
 import SinglePic from '@/components/SinglePic';
-import React, { useState } from 'react';
-import copitoPics from '../../utils/copitoPics.json';
-import Image from 'next/image';
-import { CgMenuRound } from 'react-icons/cg';
+import React, { useEffect, useState } from 'react';
 import NewPost from '@/components/NewPost';
 import ExploreProfiles from '@/components/ExploreProfiles';
 import AddPost from '@/components/AddPost';
 import SideProfile from '@/components/SideProfile';
-import { HiArrowCircleUp } from 'react-icons/hi';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import connectMongo from '../../utils/connectMongo';
 import Post from '../../models/Post';
 import User from '../../models/User';
 import { ObjectId } from 'mongodb';
+import { Author, Comment } from '../../utils/types';
 
 type Props = {
   users: {
@@ -24,29 +21,26 @@ type Props = {
   }[];
 
   posts: {
-    userId: {
-      name: string;
-      image: string;
-    };
+    _id: ObjectId;
+    userId: Author;
     img: string;
     description: string;
     createdAt: Date;
     updatedAt: Date;
+    likes: Author[];
+
+    comments: Comment[];
   }[];
 };
 
 const Index = ({ posts, users }: Props) => {
-  const { data: session, status, update } = useSession();
+  const { data: session, update } = useSession();
 
   const router = useRouter();
-
-  posts = posts.reverse();
 
   const fetchUser = async () => {
     const response = await fetch(`/api/user?id=${session!.user.email}`);
     const data = await response.json();
-
-    console.log('d', data);
 
     update({
       user: {
@@ -60,6 +54,13 @@ const Index = ({ posts, users }: Props) => {
     });
   };
 
+  const changePic = (src: string, desc: string) => {
+    console.log('yes');
+  };
+
+  const [openNewPost, setOpenNewPost] = useState(false);
+  const [openZoom, setOpenZoom] = useState(false);
+
   if (session) {
     if (!session.user?.name) {
       router.push('/form');
@@ -69,15 +70,10 @@ const Index = ({ posts, users }: Props) => {
     }
   }
 
-  const changePic = (src: string, desc: string) => {
-    console.log('yes');
-  };
-
-  const [openNewPost, setOpenNewPost] = useState(false);
-  const [openZoom, setOpenZoom] = useState(false);
+  if (!session?.user.name) return <div>Loading...</div>;
 
   return (
-    <main className="flex flex-col items-center shadow-xl shadow-black relative min-h-screen bg-neutral-200">
+    <main className="flex flex-col items-center shadow-xl shadow-black relative min-h-screen bg-neutral-200 pb-20">
       {openNewPost ? <NewPost open={setOpenNewPost} /> : null}
       <Navbar />
 
@@ -108,16 +104,19 @@ const Index = ({ posts, users }: Props) => {
 
 export default Index;
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
   await connectMongo();
 
   const posts = JSON.parse(
-    JSON.stringify(await Post.find().populate({ path: 'userId', model: User }))
-  );
+    JSON.stringify(
+      await Post.find()
+        .populate({ path: 'userId', model: User })
+        .populate({ path: 'comments.author', model: 'User' })
+        .populate({ path: 'likes', model: 'User' })
+    )
+  ).reverse();
 
   const users = JSON.parse(JSON.stringify(await User.find()));
-
-  console.log(posts);
 
   return {
     props: {

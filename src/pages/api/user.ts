@@ -42,8 +42,6 @@ export default async function handler(
 
         const updatedUser = await User.findOne({ email: req.body.email });
 
-        console.log(updatedUser);
-
         res.json({
           updatedUser,
         });

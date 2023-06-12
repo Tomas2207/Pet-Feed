@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 import mongoose, { Schema, model, models } from 'mongoose';
 
 const postSchema = new mongoose.Schema(
@@ -9,12 +10,22 @@ const postSchema = new mongoose.Schema(
     },
     img: {
       type: String,
-      required: true,
+    },
+    video: {
+      type: String,
     },
     description: {
       type: String,
       required: true,
     },
+    likes: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    comments: [
+      {
+        author: { type: Schema.Types.ObjectId, ref: 'User' },
+        content: { type: String },
+        createdAt: { type: Date },
+      },
+    ],
   },
   {
     timestamps: true,

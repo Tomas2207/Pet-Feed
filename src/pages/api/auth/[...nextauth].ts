@@ -17,8 +17,8 @@ export const authOptions: NextAuthOptions = {
           email: profile.email,
           image: profile.avatar_url,
           description: '',
-          following: 0,
-          followers: 0,
+          following: [],
+          followers: [],
         };
       },
     }),
@@ -45,7 +45,6 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     jwt({ token, trigger, session, user }) {
       if (trigger === 'update') {
-        console.log('y', session.user);
         token.id = session.user.id;
         token.name = session.user.name;
         token.picture = session.user.image;
@@ -57,7 +56,6 @@ export const authOptions: NextAuthOptions = {
     },
     session({ session, token }) {
       if (token && session.user) {
-        console.log('sesh', token);
         session.user.description = token.description;
         session.user.id = token.id;
         session.user.followers = token.followers;

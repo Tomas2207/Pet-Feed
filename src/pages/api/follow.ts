@@ -22,8 +22,6 @@ export default async function handler(
         addNewFollower.save();
         addNewFollowing.save();
 
-        console.log(addNewFollower);
-
         res.json({
           addNewFollowing,
           addNewFollower,

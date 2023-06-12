@@ -30,19 +30,25 @@ const AddPost = ({ setOpenNewPost }: Props) => {
           Create Post
         </button>
         <div className="flex items-center justify-between my-1">
-          <div className="flex items-center mt-2 w-28 h-10 justify-center rounded-xl gap-1 bg-neutral-200 px-2 text-neutral-800">
+          <div
+            onClick={() => setOpenNewPost(true)}
+            className="flex items-center mt-2 w-28 h-10 justify-center rounded-xl gap-1 bg-neutral-200 px-2 text-neutral-700 cursor-pointer hover:bg-opacity-70"
+          >
             <MdInsertPhoto className="text-4xl text-teal-500" />
             Photo
           </div>
-          <div className="flex items-center mt-2 w-28 h-10 justify-center rounded-xl gap-1 bg-neutral-200 px-2 text-neutral-800">
+          <div
+            onClick={() => setOpenNewPost(true)}
+            className="flex items-center mt-2 w-28 h-10 justify-center rounded-xl gap-1 bg-neutral-200 px-2 text-neutral-700 cursor-pointer hover:bg-opacity-70"
+          >
             <RiVideoFill className="text-4xl text-blue-500" />
             Video
           </div>
-          <div className="flex items-center mt-2 w-28 h-10 justify-center rounded-xl gap-1 bg-neutral-200 px-2 text-neutral-800 py-1">
+          <div className="flex items-center mt-2 w-28 h-10 justify-center rounded-xl gap-1 bg-neutral-200 px-2 text-neutral-700 cursor-pointer hover:bg-opacity-70">
             <FaPollH className="text-3xl text-orange-500" />
             Poll
           </div>
-          <div className="flex items-center mt-2 w-28 h-10 justify-center rounded-xl gap-1 bg-neutral-200 px-2 text-neutral-800 py-1">
+          <div className="flex items-center mt-2 w-28 h-10 justify-center rounded-xl gap-1 bg-neutral-200 px-2 text-neutral-700 cursor-pointer hover:bg-opacity-70">
             <MdArticle className="text-4xl text-pink-400" />
             Article
           </div>

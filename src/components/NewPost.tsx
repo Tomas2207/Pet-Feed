@@ -1,9 +1,12 @@
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { AiFillLike, AiOutlineComment, AiOutlineLike } from 'react-icons/ai';
 import { BiShareAlt } from 'react-icons/bi';
-import { FaComment, FaShareAlt } from 'react-icons/fa';
+import { FaComment, FaPollH, FaShareAlt } from 'react-icons/fa';
+import { MdArticle, MdInsertPhoto } from 'react-icons/md';
+import { RiVideoFill } from 'react-icons/ri';
 import { RxCrossCircled } from 'react-icons/rx';
 
 type Props = {
@@ -11,20 +14,35 @@ type Props = {
 };
 
 const NewPost = ({ open }: Props) => {
-  const [fileInputState, setFileInputState] = useState();
   const [previewSource, setPreviewSource] = useState('');
   const [disableBtn, setDisableBtn] = useState(false);
   const [description, setDescription] = useState('');
+  const [videoFile, setVideoFile] = useState();
+  const [videoSrc, setVideoSrc] = useState('');
+
+  const router = useRouter();
 
   const { data: session } = useSession();
 
-  const handleFileInputChange = (e: React.FormEvent<HTMLInputElement>) => {
+  const handleFileInputChange = (
+    e: React.FormEvent<HTMLInputElement>,
+    type: string
+  ) => {
     const fileInput = e.target as HTMLInputElement;
     const files = fileInput.files;
 
-    if (files && files.length > 0) {
+    if (files && files.length > 0 && type === 'image') {
       const file = files[0];
       previewFile(file);
+    } else if (files && files.length && type === 'video') {
+      const file = files[0];
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setVideoSrc(reader.result as string);
+      };
+      // videoPreview(file);
     }
   };
 
@@ -38,11 +56,13 @@ const NewPost = ({ open }: Props) => {
 
   const handleSubmitFile = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!previewSource) return;
-    uploadImage(previewSource);
+    if (!previewSource && !videoSrc) return;
+
+    if (previewSource) uploadImage(previewSource, 'image');
+    else if (videoSrc) uploadImage(videoSrc, 'video');
   };
 
-  const uploadImage = async (base64EncodedImage: any) => {
+  const uploadImage = async (base64EncodedImage: any, type: string) => {
     setDisableBtn(true);
     try {
       await fetch('/api/post', {
@@ -51,11 +71,13 @@ const NewPost = ({ open }: Props) => {
           data: base64EncodedImage,
           description: description,
           userId: session?.user.id,
+          type: type,
         }),
         headers: { 'Content-type': 'application/json' },
       });
       open(false);
       setDisableBtn(false);
+      router.replace(router.asPath);
     } catch (error) {
       console.error(error);
     }
@@ -88,32 +110,54 @@ const NewPost = ({ open }: Props) => {
             <input
               type="text"
               autoFocus
-              className="px-2 py-2"
+              className="px-2 py-2 outline-none"
               placeholder="Something in mind?"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
-            <div className="flex gap-2 mb-2">
-              <label
-                htmlFor="image"
-                className="bg-teal-600 rounded-md px-4 py-2 text-white text-center flex-1 cursor-pointer"
-              >
-                Choose File
-              </label>
+            <div className="flex mb-2 items-center justify-between gap-2">
+              {/* Image & Video buttons */}
+              <div className="flex items-center justify-between my-1 gap-4">
+                <label
+                  htmlFor="image"
+                  className="flex items-center w-28 h-10 justify-center rounded-xl gap-1 bg-neutral-200 px-2 text-neutral-800 cursor-pointer"
+                >
+                  <MdInsertPhoto className="text-4xl text-teal-500" />
+                  Photo
+                </label>
+                <label
+                  htmlFor="video"
+                  className="flex items-center w-28 h-10 justify-center rounded-xl gap-1 bg-neutral-200 px-2 text-neutral-800 cursor-pointer"
+                >
+                  <RiVideoFill className="text-4xl text-blue-500" />
+                  Video
+                </label>
+              </div>
+
+              {/*  */}
+
               <input
                 type="file"
                 name="image"
                 id="image"
-                onChange={handleFileInputChange}
-                value={fileInputState}
+                onChange={(e) => handleFileInputChange(e, 'image')}
                 hidden
+                accept="image/*"
+              />
+              <input
+                type="file"
+                name="video"
+                id="video"
+                onChange={(e) => handleFileInputChange(e, 'video')}
+                hidden
+                accept="video/*"
               />
               <button
                 type="submit"
                 className={
                   !disableBtn
-                    ? 'bg-black text-white rounded-md px-2'
-                    : 'bg-black text-white rounded-md px-2 bg-opacity-30'
+                    ? 'bg-black text-white rounded-md px-2 h-10 flex-1'
+                    : 'bg-black text-white rounded-md px-2 h-10 bg-opacity-30 flex-1'
                 }
                 disabled={disableBtn}
               >
@@ -130,6 +174,17 @@ const NewPost = ({ open }: Props) => {
                 className="object-cover"
                 alt="preview"
               />
+            </div>
+          ) : null}
+          {videoSrc ? (
+            <div className="h-[30rem] w-[28rem] relative rounded-md overflow-hidden flex j1ustify-center items-center text-4xl text-white font-bold">
+              <video
+                className="h-full w-full object-cover"
+                src={videoSrc}
+                autoPlay
+                muted
+                controls
+              ></video>
             </div>
           ) : null}
         </div>

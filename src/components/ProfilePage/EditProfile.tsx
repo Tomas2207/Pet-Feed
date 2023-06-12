@@ -69,6 +69,8 @@ const EditProfile = ({ profile, setOpenForm }: Props) => {
           name: res.updatedUser.name,
           description: res.updatedUser.description,
           image: res.updatedUser.image,
+          following: res.updatedUser.following,
+          followers: res.updatedUser.followers,
         },
       });
 

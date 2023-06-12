@@ -1,6 +1,6 @@
 import copitoPics from '../../../utils/copitoPics.json';
 import ZoomPic from '../../components/ZoomPic';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ProfileInfo from '../../components/ProfilePage/ProfileInfo';
 import SinglePic from '@/components/SinglePic';
 import Navbar from '@/components/Navbar/Navbar';
@@ -10,6 +10,8 @@ import User from '../../../models/User';
 import mongoose, { Schema } from 'mongoose';
 import { ObjectId } from 'mongodb';
 import Post from '../../../models/Post';
+import { useSession } from 'next-auth/react';
+import { Author, Comment } from '../../../utils/types';
 
 type Profile = {
   profile: {
@@ -17,24 +19,33 @@ type Profile = {
     name: string;
     description: string;
     image: string;
+    followers: string[];
+    following: string[];
   };
 
   posts: {
-    userId: {
-      name: string;
-      image: string;
-    };
+    _id: ObjectId;
+    userId: Author;
     img: string;
     description: string;
     createdAt: Date;
+    updatedAt: Date;
+    likes: Author[];
+
+    comments: Comment[];
   }[];
 };
 
 export default function ProfilePage({ profile, posts }: Profile) {
   const [currentPic, setCurrentPic] = useState({ src: '', desc: '' });
   const [openZoom, setOpenZoom] = useState(false);
+  const { data: session } = useSession();
 
   const user = profile;
+
+  useEffect(() => {
+    console.log('huh', user);
+  }, []);
 
   const changePic = (src: string, desc: string) => {
     setOpenZoom(true);
@@ -65,14 +76,14 @@ export default function ProfilePage({ profile, posts }: Profile) {
             </p>
           </div>
           <div className="w-full h-[1px] bg-gray-500 bg-opacity-20 mb-6" />
-          <div className="gap-2 grid 2xl:grid-cols-2">
-            {posts.reverse().map((pic, i) => (
+          <div className="gap-1 grid 2xl:grid-cols-2">
+            {posts.map((pic, i) => (
               <SinglePic key={i} pic={pic} changePic={changePic} />
             ))}
           </div>
           {posts.length === 0 ? (
             <div className="w-[50vw] px-6 text-neutral-600">
-              {user.name} has no posts yet
+              {user?.name} has no posts yet
             </div>
           ) : null}
         </div>
@@ -83,15 +94,21 @@ export default function ProfilePage({ profile, posts }: Profile) {
 
 export const getServerSideProps = async ({ query }: any) => {
   await connectMongo();
-  console.log('query', query);
 
   let id = new ObjectId(query.profileId);
 
-  const profile = JSON.parse(JSON.stringify(await User.findOne({ _id: id })));
+  const profile = JSON.parse(JSON.stringify(await User.findById(id)));
+
+  console.log('a', profile);
 
   const posts = JSON.parse(
-    JSON.stringify(await Post.find({ userId: id }).populate('userId'))
-  );
+    JSON.stringify(
+      await Post.find()
+        .populate({ path: 'userId', model: User })
+        .populate({ path: 'comments.author', model: 'User' })
+        .populate({ path: 'likes', model: 'User' })
+    )
+  ).reverse();
 
   return {
     props: {

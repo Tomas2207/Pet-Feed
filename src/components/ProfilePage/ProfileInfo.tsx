@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { MdModeEditOutline } from 'react-icons/md';
 import EditProfile from './EditProfile';
+import { ObjectId } from 'mongodb';
 
 type Profile = {
   profile: {
@@ -11,6 +12,8 @@ type Profile = {
     name: string;
     description: string;
     image: string;
+    followers: string[];
+    following: string[];
   };
 };
 
@@ -19,6 +22,10 @@ const ProfileInfo = ({ profile }: Profile) => {
 
   const [openForm, setOpenForm] = useState(false);
 
+  useEffect(() => {
+    console.log('a', profile);
+  }, []);
+
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -26,18 +33,19 @@ const ProfileInfo = ({ profile }: Profile) => {
     image: profile.image,
     name: profile.name,
     description: profile.description,
+    followers: profile.followers,
+    following: profile.following,
   });
 
   useEffect(() => {
     if (session?.user.id === router.query.profileId) {
       setMyProfile(true);
-    }
-    if (session) {
-      console.log('WR', session.user);
       setProfileState({
-        image: session.user.image as string,
-        name: session.user.name as string,
-        description: session.user.description,
+        image: session?.user.image as string,
+        name: session?.user.name as string,
+        description: session!.user.description,
+        followers: session!.user.followers,
+        following: session!.user.following,
       });
     }
   }, [session]);
@@ -69,13 +77,13 @@ const ProfileInfo = ({ profile }: Profile) => {
               <div>
                 <p className="font-bold">Followers</p>
                 <p className="text-teal-600 font-bold text-2xl">
-                  {session?.user.followers.length}
+                  {profile.followers.length}
                 </p>
               </div>
               <div>
                 <p className="font-bold">Following</p>
                 <p className="text-teal-600 font-bold text-2xl">
-                  {session?.user.following.length}
+                  {profile.following.length}
                 </p>
               </div>
             </div>

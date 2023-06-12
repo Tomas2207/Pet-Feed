@@ -1,10 +1,11 @@
 import Image from 'next/image';
-import React from 'react';
+import React, { useEffect } from 'react';
 import copitoPics from '../../utils/copitoPics.json';
 import { TbArrowForwardUp } from 'react-icons/tb';
 import { SlOptions } from 'react-icons/sl';
 import { ObjectId } from 'mongodb';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 type Props = {
   profiles: {
@@ -17,6 +18,10 @@ type Props = {
 
 const ExploreProfiles = ({ profiles, fetchUser }: Props) => {
   const { data: session } = useSession();
+
+  useEffect(() => {
+    console.log(session?.user);
+  }, []);
 
   const addFollowing = async (id: ObjectId) => {
     await fetch(`/api/follow`, {
@@ -49,23 +54,27 @@ const ExploreProfiles = ({ profiles, fetchUser }: Props) => {
             />
             <div className="z-[50] px-6 self-start pb-4 bg-white w-full group-hover:bg-opacity-80">
               <div className="flex gap-2 items-center mt-4">
-                <div className="h-16 w-16 relative">
+                <Link
+                  href={`/profile/${pic._id}`}
+                  className="h-16 w-16 relative"
+                >
                   <Image
                     src={pic.image}
                     fill
                     className="object-cover absolute rounded-full"
                     alt="explore-profile"
                   />
-                </div>
+                </Link>
                 <div>
                   <p className="text-lg font-bold text-neutral-600">
                     {pic.name}
                   </p>
                   <p className="text-neutral-500 text-sm">Active Recently</p>
                 </div>
-                {!session?.user.following.includes(pic._id) ? (
+
+                {!session?.user?.following?.includes(pic._id.toString()) ? (
                   <button
-                    className="border border-neutral-300 bg-white py-2 px-6 rounded-xl ml-auto text-neutral-600"
+                    className="border border-neutral-300 bg-white py-2 px-6 rounded-xl ml-auto mr-0 text-neutral-600"
                     onClick={() => addFollowing(pic._id)}
                   >
                     {session?.user.id === pic._id.toString() ? 'Me' : 'Follow'}
