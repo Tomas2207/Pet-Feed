@@ -19,6 +19,7 @@ export const authOptions: NextAuthOptions = {
           description: '',
           following: [],
           followers: [],
+          savedPosts: [],
         };
       },
     }),
@@ -34,6 +35,7 @@ export const authOptions: NextAuthOptions = {
           description: '',
           following: [],
           followers: [],
+          savedPosts: [],
         };
       },
     }),
@@ -51,6 +53,7 @@ export const authOptions: NextAuthOptions = {
         token.description = session.user.description;
         token.followers = session.user.followers;
         token.following = session.user.following;
+        token.savedPosts = session.user.savedPosts;
       }
       return token;
     },
@@ -60,6 +63,7 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.id;
         session.user.followers = token.followers;
         session.user.following = token.following;
+        session.user.savedPosts = token.savedPosts;
       }
       return session;
     },

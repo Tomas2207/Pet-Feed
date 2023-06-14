@@ -1,13 +1,10 @@
-import copitoPics from '../../../utils/copitoPics.json';
 import ZoomPic from '../../components/ZoomPic';
 import { useEffect, useState } from 'react';
 import ProfileInfo from '../../components/ProfilePage/ProfileInfo';
-import SinglePic from '@/components/SinglePic';
+import SinglePic from '@/components//Post/SinglePic';
 import Navbar from '@/components/Navbar/Navbar';
-import { GetServerSideProps } from 'next';
 import connectMongo from '../../../utils/connectMongo';
 import User from '../../../models/User';
-import mongoose, { Schema } from 'mongoose';
 import { ObjectId } from 'mongodb';
 import Post from '../../../models/Post';
 import { useSession } from 'next-auth/react';
@@ -23,7 +20,7 @@ type Profile = {
     following: string[];
   };
 
-  posts: {
+  serverPosts: {
     _id: ObjectId;
     userId: Author;
     img: string;
@@ -36,16 +33,24 @@ type Profile = {
   }[];
 };
 
-export default function ProfilePage({ profile, posts }: Profile) {
+export default function ProfilePage({ profile, serverPosts }: Profile) {
   const [currentPic, setCurrentPic] = useState({ src: '', desc: '' });
   const [openZoom, setOpenZoom] = useState(false);
   const { data: session } = useSession();
+  const [posts, setPosts] = useState(serverPosts);
 
   const user = profile;
 
   useEffect(() => {
     console.log('huh', user);
   }, []);
+
+  const fetchPosts = async () => {
+    const res = await fetch('/api/post');
+    const fetchedPosts = await res.json();
+    // console.log(fetchedPosts.posts);
+    setPosts(fetchedPosts.posts);
+  };
 
   const changePic = (src: string, desc: string) => {
     setOpenZoom(true);
@@ -57,7 +62,6 @@ export default function ProfilePage({ profile, posts }: Profile) {
 
   return (
     <main className="flex flex-col items-center shadow-xl shadow-black relative bg-neutral-200 min-h-screen ">
-      <Navbar />
       {openZoom ? (
         <ZoomPic
           src={currentPic.src}
@@ -78,7 +82,12 @@ export default function ProfilePage({ profile, posts }: Profile) {
           <div className="w-full h-[1px] bg-gray-500 bg-opacity-20 mb-6" />
           <div className="gap-1 grid 2xl:grid-cols-2">
             {posts.map((pic, i) => (
-              <SinglePic key={i} pic={pic} changePic={changePic} />
+              <SinglePic
+                key={i}
+                pic={pic}
+                changePic={changePic}
+                fetchPosts={fetchPosts}
+              />
             ))}
           </div>
           {posts.length === 0 ? (
@@ -113,7 +122,7 @@ export const getServerSideProps = async ({ query }: any) => {
   return {
     props: {
       profile: profile,
-      posts: posts,
+      serverPosts: posts,
     },
   };
 };

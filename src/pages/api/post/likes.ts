@@ -19,26 +19,21 @@ export default async function handler(
 
       addNewLike.save();
 
-      res.json({ addNewLike });
+      res.json({ likes: addNewLike.likes });
       break;
 
     case 'PATCH':
       const removeLike = await Post.findById(req.body.postId);
 
       const id = new ObjectId(req.body.likeId);
-      console.log('before', removeLike.likes[0]);
-      console.log(id);
-      console.log(removeLike.likes[0].equals(id));
 
       removeLike.likes = removeLike.likes.filter(
         (item: ObjectId) => !item.equals(id)
       );
 
-      console.log('after', removeLike.likes);
-
       removeLike.save();
 
-      res.json({ removeLike });
+      res.json({ likes: removeLike.likes });
       break;
     default:
       break;

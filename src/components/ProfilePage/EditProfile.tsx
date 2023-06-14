@@ -71,6 +71,7 @@ const EditProfile = ({ profile, setOpenForm }: Props) => {
           image: res.updatedUser.image,
           following: res.updatedUser.following,
           followers: res.updatedUser.followers,
+          savedPosts: res.updatedUser.savedPosts,
         },
       });
 

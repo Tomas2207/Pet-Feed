@@ -47,7 +47,12 @@ export default async function handler(
       break;
 
     case 'GET':
-      const posts = await Post.find();
+      let posts = await Post.find()
+        .populate('userId')
+        .populate('comments.author')
+        .populate('likes');
+
+      posts = posts.reverse();
       res.json({ posts });
       break;
     default:

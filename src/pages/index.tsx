@@ -1,5 +1,5 @@
 import Navbar from '@/components/Navbar/Navbar';
-import SinglePic from '@/components/SinglePic';
+import SinglePic from '@/components/Post/SinglePic';
 import React, { useEffect, useState } from 'react';
 import NewPost from '@/components/NewPost';
 import ExploreProfiles from '@/components/ExploreProfiles';
@@ -20,7 +20,7 @@ type Props = {
     image: string;
   }[];
 
-  posts: {
+  serverPosts: {
     _id: ObjectId;
     userId: Author;
     img: string;
@@ -33,10 +33,20 @@ type Props = {
   }[];
 };
 
-const Index = ({ posts, users }: Props) => {
+const Index = ({ serverPosts, users }: Props) => {
   const { data: session, update } = useSession();
+  const [posts, setPosts] = useState(serverPosts);
+  const [savedPosts, setSavedPosts] = useState(false);
 
   const router = useRouter();
+
+  const fetchPosts = async () => {
+    const res = await fetch('/api/post');
+    const fetchedPosts = await res.json();
+    setPosts(fetchedPosts.posts);
+  };
+
+  const changeToSavedPosts = {};
 
   const fetchUser = async () => {
     const response = await fetch(`/api/user?id=${session!.user.email}`);
@@ -50,16 +60,10 @@ const Index = ({ posts, users }: Props) => {
         image: data.currentUser.image,
         followers: data.currentUser.followers,
         following: data.currentUser.following,
+        savedPosts: data.currentUser.savedPosts,
       },
     });
   };
-
-  const changePic = (src: string, desc: string) => {
-    console.log('yes');
-  };
-
-  const [openNewPost, setOpenNewPost] = useState(false);
-  const [openZoom, setOpenZoom] = useState(false);
 
   if (session) {
     if (!session.user?.name) {
@@ -70,12 +74,18 @@ const Index = ({ posts, users }: Props) => {
     }
   }
 
-  if (!session?.user.name) return <div>Loading...</div>;
+  const changePic = (src: string, desc: string) => {
+    console.log('yes');
+  };
+
+  const [openNewPost, setOpenNewPost] = useState(false);
+  const [openZoom, setOpenZoom] = useState(false);
+
+  if (session && !session?.user.followers) return <div>Loading...</div>;
 
   return (
     <main className="flex flex-col items-center shadow-xl shadow-black relative min-h-screen bg-neutral-200 pb-20">
       {openNewPost ? <NewPost open={setOpenNewPost} /> : null}
-      <Navbar />
 
       <div className="w-[70%] h-[0.1px] bg-gray-500 bg-opacity-20 my-6" />
 
@@ -89,7 +99,12 @@ const Index = ({ posts, users }: Props) => {
 
           <div className="flex flex-col w-full items-center gap-6">
             {posts.map((pic, i) => (
-              <SinglePic key={i} pic={pic} changePic={changePic} />
+              <SinglePic
+                key={i}
+                pic={pic}
+                changePic={changePic}
+                fetchPosts={fetchPosts}
+              />
             ))}
           </div>
           {/* -------- */}
@@ -120,7 +135,7 @@ export const getServerSideProps = async () => {
 
   return {
     props: {
-      posts: posts,
+      serverPosts: posts,
       users: users,
     },
   };

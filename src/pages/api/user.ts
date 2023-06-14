@@ -14,11 +14,17 @@ export default async function handler(
       try {
         let uploadedResponse;
 
+        const user = await User.findOne({ email: req.body.email });
+
         if (req.body.img) {
           const fileStr = req.body.img;
           uploadedResponse = await cloudinary.uploader.upload(fileStr, {
             folder: 'pet-media',
           });
+
+          if (user.image_public_id) {
+            cloudinary.uploader.destroy(user.image_public_id);
+          }
 
           await User.updateOne({ email: req.body.email }, [
             {
@@ -26,6 +32,7 @@ export default async function handler(
                 description: req.body.description,
                 name: req.body.petName,
                 image: uploadedResponse.secure_url,
+                image_public_id: uploadedResponse.public_id,
               },
             },
           ]);

@@ -67,6 +67,7 @@ const Form = () => {
           image: res.updatedUser.image,
           following: [],
           followers: [],
+          savedPosts: [],
         },
       });
       // setDisableBtn(false);

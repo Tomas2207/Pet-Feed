@@ -11,7 +11,7 @@ export default async function handler(
 
   switch (req.method) {
     case 'POST':
-      const newComment = await Post.findById(req.body.postId);
+      let newComment = await Post.findById(req.body.postId);
 
       console.log(req.body.content);
 
@@ -23,7 +23,11 @@ export default async function handler(
 
       newComment.save();
 
-      res.json({ newComment });
+      newComment = await Post.findById(req.body.postId).populate(
+        'comments.author'
+      );
+
+      res.json({ newComment: newComment.comments });
       break;
 
     case 'PATCH':
