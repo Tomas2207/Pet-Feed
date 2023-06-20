@@ -12,6 +12,7 @@ import Post from '../../models/Post';
 import User from '../../models/User';
 import { ObjectId } from 'mongodb';
 import { Author, Comment } from '../../utils/types';
+import LatestPost from '@/components/LatestPost';
 
 type Props = {
   users: {
@@ -36,17 +37,18 @@ type Props = {
 const Index = ({ serverPosts, users }: Props) => {
   const { data: session, update } = useSession();
   const [posts, setPosts] = useState(serverPosts);
-  const [savedPosts, setSavedPosts] = useState(false);
 
   const router = useRouter();
+
+  useEffect(() => {
+    console.log(session?.user.savedPosts);
+  }, [session?.user.savedPosts]);
 
   const fetchPosts = async () => {
     const res = await fetch('/api/post');
     const fetchedPosts = await res.json();
     setPosts(fetchedPosts.posts);
   };
-
-  const changeToSavedPosts = {};
 
   const fetchUser = async () => {
     const response = await fetch(`/api/user?id=${session!.user.email}`);
@@ -85,12 +87,18 @@ const Index = ({ serverPosts, users }: Props) => {
 
   return (
     <main className="flex flex-col items-center shadow-xl shadow-black relative min-h-screen bg-neutral-200 pb-20">
-      {openNewPost ? <NewPost open={setOpenNewPost} /> : null}
+      <Navbar />
+      {openNewPost ? (
+        <NewPost open={setOpenNewPost} fetchPosts={fetchPosts} />
+      ) : null}
 
       <div className="w-[70%] h-[0.1px] bg-gray-500 bg-opacity-20 my-6" />
 
-      <div className="w-full sm:w-auto flex justify-center gap-6">
-        <SideProfile />
+      <div className="w-full sm:w-auto flex justify-center md:gap-6">
+        <div className="h-fit sticky top-20">
+          <SideProfile />
+          <LatestPost posts={posts} />
+        </div>
         <div className="flex flex-col items-center w-full">
           {/* Add Post */}
           <AddPost setOpenNewPost={setOpenNewPost} />

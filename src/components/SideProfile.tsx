@@ -12,7 +12,7 @@ const SideProfile = () => {
   }
 
   return (
-    <div className="h-fit w-[23rem] bg-white px-4 rounded-xl sticky top-20 hidden lg:flex flex-col items-center justify-center text-center border border-neutral-300">
+    <div className="h-fit w-[23rem] bg-white px-4 rounded-xl hidden lg:flex flex-col items-center justify-center text-center border border-neutral-300">
       <div className="flex gap-6 mb-4 items-end">
         {session ? (
           <div className="font-bold">

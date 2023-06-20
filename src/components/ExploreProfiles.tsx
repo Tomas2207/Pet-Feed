@@ -1,8 +1,5 @@
 import Image from 'next/image';
 import React, { useEffect } from 'react';
-import copitoPics from '../../utils/copitoPics.json';
-import { TbArrowForwardUp } from 'react-icons/tb';
-import { SlOptions } from 'react-icons/sl';
 import { ObjectId } from 'mongodb';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -24,6 +21,18 @@ const ExploreProfiles = ({ profiles, fetchUser }: Props) => {
   }, []);
 
   const addFollowing = async (id: ObjectId) => {
+    await fetch(`/api/follow`, {
+      method: 'POST',
+      body: JSON.stringify({
+        otherId: id,
+        hostId: session?.user.id,
+      }),
+      headers: { 'Content-type': 'application/json' },
+    });
+
+    fetchUser();
+  };
+  const removeFollowing = async (id: ObjectId) => {
     await fetch(`/api/follow`, {
       method: 'PATCH',
       body: JSON.stringify({
@@ -71,18 +80,28 @@ const ExploreProfiles = ({ profiles, fetchUser }: Props) => {
                   </p>
                   <p className="text-neutral-500 text-sm">Active Recently</p>
                 </div>
-
-                {!session?.user?.following?.includes(pic._id.toString()) ? (
-                  <button
-                    className="border border-neutral-300 bg-white py-2 px-6 rounded-xl ml-auto mr-0 text-neutral-600"
-                    onClick={() => addFollowing(pic._id)}
-                  >
-                    {session?.user.id === pic._id.toString() ? 'Me' : 'Follow'}
+                {session?.user.id === pic._id.toString() ? (
+                  <button className="border border-neutral-300 bg-white py-2 px-6 rounded-xl ml-auto mr-0 text-neutral-600">
+                    Me
                   </button>
                 ) : (
-                  <button className="border border-neutral-300 bg-teal-600 py-2 px-6 rounded-xl ml-auto text-white">
-                    Following
-                  </button>
+                  <div className="ml-auto">
+                    {!session?.user?.following?.includes(pic._id.toString()) ? (
+                      <button
+                        className="border border-neutral-300 bg-white py-2 px-6 rounded-xl ml-auto mr-0 text-neutral-600"
+                        onClick={() => addFollowing(pic._id)}
+                      >
+                        Follow
+                      </button>
+                    ) : (
+                      <button
+                        className="border border-neutral-300 bg-teal-600 py-2 px-6 rounded-xl ml-auto text-white"
+                        onClick={() => removeFollowing(pic._id)}
+                      >
+                        Following
+                      </button>
+                    )}
+                  </div>
                 )}
               </div>
             </div>

@@ -1,25 +1,30 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import { CgMenuRound } from 'react-icons/cg';
-import { MdOutlinePets } from 'react-icons/md';
 import NavbarMenu from './NavbarMenu';
 import {
   AiFillBell,
   AiFillHeart,
   AiFillHome,
   AiFillMessage,
-  AiOutlineBell,
-  AiOutlineMessage,
 } from 'react-icons/ai';
 import { FiSearch } from 'react-icons/fi';
 import { signIn, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 const Navbar = () => {
   const [changeNav, setChangeNav] = useState(false);
+  const [searchInput, setSearchInput] = useState('');
+
+  const router = useRouter();
 
   const changeNavBg = () => {
     window.scrollY >= 100 ? setChangeNav(true) : setChangeNav(false);
+  };
+
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    router.push(`/search/${searchInput}`);
   };
 
   const { data: session } = useSession();
@@ -72,14 +77,21 @@ const Navbar = () => {
               : 'text-white hover:text-teal-600 transition-all duration-150 cursor-pointer ease-in-out'
           }
         />
-        <div className="flex items-center justify-center gap-2">
+        <form
+          className="flex items-center justify-center gap-2"
+          onSubmit={handleFormSubmit}
+        >
           <input
             type="text"
             className="border-2 rounded-md text-lg px-2 lg:w-[30rem] py-1 outline-none"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
             placeholder="search..."
           />
-          <FiSearch />
-        </div>
+          <button type="submit">
+            <FiSearch />
+          </button>
+        </form>
       </div>
       <input
         type="text"

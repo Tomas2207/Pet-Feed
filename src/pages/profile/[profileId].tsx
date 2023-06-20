@@ -9,10 +9,11 @@ import { ObjectId } from 'mongodb';
 import Post from '../../../models/Post';
 import { useSession } from 'next-auth/react';
 import { Author, Comment } from '../../../utils/types';
+import { useRouter } from 'next/router';
 
 type Profile = {
   profile: {
-    _id: Number;
+    _id: ObjectId;
     name: string;
     description: string;
     image: string;
@@ -38,18 +39,15 @@ export default function ProfilePage({ profile, serverPosts }: Profile) {
   const [openZoom, setOpenZoom] = useState(false);
   const { data: session } = useSession();
   const [posts, setPosts] = useState(serverPosts);
+  const router = useRouter();
 
   const user = profile;
 
-  useEffect(() => {
-    console.log('huh', user);
-  }, []);
-
   const fetchPosts = async () => {
-    const res = await fetch('/api/post');
+    const res = await fetch(`/api/post/userPosts/${router.query.profileId}`);
     const fetchedPosts = await res.json();
-    // console.log(fetchedPosts.posts);
-    setPosts(fetchedPosts.posts);
+    // console.log(fetchedPosts.userPosts);
+    setPosts(fetchedPosts.userPosts.reverse());
   };
 
   const changePic = (src: string, desc: string) => {
@@ -62,6 +60,7 @@ export default function ProfilePage({ profile, serverPosts }: Profile) {
 
   return (
     <main className="flex flex-col items-center shadow-xl shadow-black relative bg-neutral-200 min-h-screen ">
+      <Navbar />
       {openZoom ? (
         <ZoomPic
           src={currentPic.src}
@@ -80,7 +79,7 @@ export default function ProfilePage({ profile, serverPosts }: Profile) {
             </p>
           </div>
           <div className="w-full h-[1px] bg-gray-500 bg-opacity-20 mb-6" />
-          <div className="gap-1 grid 2xl:grid-cols-2">
+          <div className="gap-1 2xl:columns-2">
             {posts.map((pic, i) => (
               <SinglePic
                 key={i}
@@ -112,7 +111,7 @@ export const getServerSideProps = async ({ query }: any) => {
 
   const posts = JSON.parse(
     JSON.stringify(
-      await Post.find()
+      await Post.find({ userId: id })
         .populate({ path: 'userId', model: User })
         .populate({ path: 'comments.author', model: 'User' })
         .populate({ path: 'likes', model: 'User' })

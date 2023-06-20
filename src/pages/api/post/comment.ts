@@ -21,7 +21,7 @@ export default async function handler(
         createdAt: Date.now(),
       });
 
-      newComment.save();
+      await newComment.save();
 
       newComment = await Post.findById(req.body.postId).populate(
         'comments.author'

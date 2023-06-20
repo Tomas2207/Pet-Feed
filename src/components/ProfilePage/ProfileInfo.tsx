@@ -8,7 +8,7 @@ import { ObjectId } from 'mongodb';
 
 type Profile = {
   profile: {
-    _id: Number;
+    _id: ObjectId;
     name: string;
     description: string;
     image: string;
@@ -19,14 +19,11 @@ type Profile = {
 
 const ProfileInfo = ({ profile }: Profile) => {
   const [myProfile, setMyProfile] = useState(false);
+  const [following, setFollowing] = useState(false);
 
   const [openForm, setOpenForm] = useState(false);
 
-  useEffect(() => {
-    console.log('a', profile);
-  }, []);
-
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   const router = useRouter();
 
   const [profileState, setProfileState] = useState({
@@ -37,18 +34,80 @@ const ProfileInfo = ({ profile }: Profile) => {
     following: profile.following,
   });
 
+  const fetchUser = async () => {
+    const response = await fetch(`/api/user?id=${session!.user.email}`);
+    const data = await response.json();
+
+    update({
+      user: {
+        id: data.currentUser._id,
+        name: data.currentUser.name,
+        description: data.currentUser.description,
+        image: data.currentUser.image,
+        followers: data.currentUser.followers,
+        following: data.currentUser.following,
+        savedPosts: data.currentUser.savedPosts,
+      },
+    });
+  };
+  const addFollowing = async (id: ObjectId) => {
+    const res = await fetch(`/api/follow`, {
+      method: 'POST',
+      body: JSON.stringify({
+        otherId: id,
+        hostId: session?.user.id,
+      }),
+      headers: { 'Content-type': 'application/json' },
+    });
+
+    const data = await res.json();
+
+    setProfileState({
+      ...profileState,
+      followers: data.addNewFollower.followers,
+      following: data.addNewFollower.following,
+    });
+
+    fetchUser();
+  };
+
+  const removeFollowing = async (id: ObjectId) => {
+    const res = await fetch(`/api/follow`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        otherId: id,
+        hostId: session?.user.id,
+      }),
+      headers: { 'Content-type': 'application/json' },
+    });
+    const data = await res.json();
+    fetchUser();
+    setProfileState({
+      ...profileState,
+      followers: data.removeFollower.followers,
+      following: data.removeFollower.following,
+    });
+  };
+
   useEffect(() => {
-    if (session?.user.id === router.query.profileId) {
-      setMyProfile(true);
-      setProfileState({
-        image: session?.user.image as string,
-        name: session?.user.name as string,
-        description: session!.user.description,
-        followers: session!.user.followers,
-        following: session!.user.following,
-      });
+    if (session) {
+      if (session?.user.id === router.query.profileId) {
+        setMyProfile(true);
+        setProfileState({
+          image: session?.user.image as string,
+          name: session?.user.name as string,
+          description: session!.user.description,
+          followers: session!.user.followers,
+          following: session!.user.following,
+        });
+      }
+      if (profileState.followers.includes(session.user.id)) {
+        setFollowing(true);
+      } else if (!profileState.followers.includes(session.user.id)) {
+        setFollowing(false);
+      }
     }
-  }, [session]);
+  }, [session, profile]);
 
   return (
     <div className="pt-6 border border-neutral-300 h-fit w-full lg:w-[23rem] bg-white rounded-md mt-2 lg:sticky top-20 z-[2]">
@@ -98,9 +157,24 @@ const ProfileInfo = ({ profile }: Profile) => {
                 <MdModeEditOutline />
               </button>
             ) : (
-              <button className="bg-teal-600 text-white px-4 py-2 rounded-lg">
-                Follow
-              </button>
+              <div>
+                {following ? (
+                  <button
+                    className="bg-teal-600 text-white px-4 py-2 rounded-lg w-full"
+                    onClick={() => removeFollowing(profile._id)}
+                  >
+                    Following
+                  </button>
+                ) : (
+                  <button
+                    className="border border-neutral-700 px-4 py-2 rounded-lg w-full
+                  text-neutral-700 hover:bg-teal-600 transition duration-150 ease-in-out hover:text-white"
+                    onClick={() => addFollowing(profile._id)}
+                  >
+                    Follow
+                  </button>
+                )}
+              </div>
             )}
           </div>
           {/* ---------------------- */}

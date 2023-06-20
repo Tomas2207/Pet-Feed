@@ -11,9 +11,10 @@ import { RxCrossCircled } from 'react-icons/rx';
 
 type Props = {
   open: Function;
+  fetchPosts: Function;
 };
 
-const NewPost = ({ open }: Props) => {
+const NewPost = ({ open, fetchPosts }: Props) => {
   const [previewSource, setPreviewSource] = useState('');
   const [disableBtn, setDisableBtn] = useState(false);
   const [description, setDescription] = useState('');
@@ -77,7 +78,7 @@ const NewPost = ({ open }: Props) => {
       });
       open(false);
       setDisableBtn(false);
-      router.replace(router.asPath);
+      fetchPosts();
     } catch (error) {
       console.error(error);
     }

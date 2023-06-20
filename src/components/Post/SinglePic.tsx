@@ -1,21 +1,23 @@
-import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { Auth, ObjectId } from 'mongodb';
+import mongoose from 'mongoose';
+import TimeAgo from 'javascript-time-ago';
+import en from 'javascript-time-ago/locale/en.json';
+import ReactTimeAgo from 'react-time-ago';
 import {
   AiFillHeart,
   AiOutlineHeart,
   AiOutlineLoading3Quarters,
 } from 'react-icons/ai';
 import { BiShareAlt } from 'react-icons/bi';
-import TimeAgo from 'javascript-time-ago';
-import en from 'javascript-time-ago/locale/en.json';
-import ReactTimeAgo from 'react-time-ago';
 import { TbMessageCircle2, TbMessageCircle2Filled } from 'react-icons/tb';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
-import { useSession } from 'next-auth/react';
-import { Auth, ObjectId } from 'mongodb';
-import mongoose from 'mongoose';
+import Image from 'next/image';
 import CommentSection from './CommentSection';
 import { Comment } from '../../../utils/types';
+import { SlOptions } from 'react-icons/sl';
+import Link from 'next/link';
 
 TimeAgo.addDefaultLocale(en);
 
@@ -57,11 +59,13 @@ const SinglePic = ({ pic, changePic, fetchPosts }: Props) => {
 
   useEffect(() => {
     checkLiked();
-    checkSaved();
-  }, [session, pic]);
+  }, [session, pic, fetchPosts]);
 
   useEffect(() => {
-    console.log(pic._id, pic.likes.length);
+    checkSaved();
+  }, []);
+
+  useEffect(() => {
     setPostLikes([...pic.likes]);
   }, [pic]);
 
@@ -76,6 +80,7 @@ const SinglePic = ({ pic, changePic, fetchPosts }: Props) => {
     }
     setLoading(false);
   };
+
   const checkSaved = () => {
     setLoadingSave(true);
     if (session) {
@@ -98,7 +103,13 @@ const SinglePic = ({ pic, changePic, fetchPosts }: Props) => {
     });
     const data = await res.json();
     console.log(data);
-    update({ ['user.savedPosts']: data.userAddPost.savedPosts });
+    update({
+      user: {
+        ...session?.user,
+        savedPosts: data.userAddPost.savedPosts,
+      },
+    });
+    // update({ ['user.savedPosts']: data.userAddPost.savedPosts });
 
     setLoadingSave(false);
     setSaved(true);
@@ -133,10 +144,17 @@ const SinglePic = ({ pic, changePic, fetchPosts }: Props) => {
 
     const data = await res.json();
     console.log(data);
-    update({ ['user.savedPosts']: data.userRemovePost.savedPosts });
+    update({
+      user: {
+        ...session?.user,
+        savedPosts: data.userRemovePost.savedPosts,
+      },
+    });
+    // update({ ['user.savedPosts']: data.userRemovePost.savedPosts });
     setLoadingSave(false);
     setSaved(false);
   };
+
   const removeLike = async () => {
     setLoading(true);
     const res = await fetch('/api/post/likes', {
@@ -156,20 +174,24 @@ const SinglePic = ({ pic, changePic, fetchPosts }: Props) => {
   return (
     <div className="bg-white rounded-xl w-full sm:w-[35rem] h-fit border border-neutral-300">
       <div className="flex gap-2 my-4 p-2">
-        <div className="relative h-12 w-12 rounded-xl overflow-hidden">
+        <Link
+          href={`/profile/${pic.userId._id}`}
+          className="relative h-12 w-12 rounded-xl overflow-hidden"
+        >
           <Image
             fill
             src={pic.userId.image}
             className="object-cover"
             alt="mini-profile"
           />
-        </div>
+        </Link>
         <div>
           <h2 className="font-bold">{pic.userId.name}</h2>
           <p className="text-neutral-600">
             <ReactTimeAgo date={pic.createdAt} locale="en-US" />
           </p>
         </div>
+        <SlOptions className="ml-auto text-xl mr-2" />
       </div>
       <p className="text-md px-4 pb-4 break-all">{pic.description}</p>
       {pic.img ? (
