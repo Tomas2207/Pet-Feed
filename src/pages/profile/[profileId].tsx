@@ -59,7 +59,7 @@ export default function ProfilePage({ profile, serverPosts }: Profile) {
   };
 
   return (
-    <main className="flex flex-col items-center shadow-xl shadow-black relative bg-neutral-200 min-h-screen ">
+    <main className="flex flex-col items-center shadow-xl shadow-black relative bg-neutral-200 min-h-screen pb-20">
       <Navbar />
       {openZoom ? (
         <ZoomPic
@@ -79,7 +79,7 @@ export default function ProfilePage({ profile, serverPosts }: Profile) {
             </p>
           </div>
           <div className="w-full h-[1px] bg-gray-500 bg-opacity-20 mb-6" />
-          <div className="gap-1 2xl:columns-2">
+          <div className="gap-1 2xl:columns-2 space-y-4">
             {posts.map((pic, i) => (
               <SinglePic
                 key={i}

@@ -1,4 +1,4 @@
-import React, { use, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import connectMongo from '../../../utils/connectMongo';
 import User from '../../../models/User';
 import Navbar from '@/components/Navbar/Navbar';
@@ -8,10 +8,12 @@ import Image from 'next/image';
 import Post from '../../../models/Post';
 import { Author, Comment } from '../../../utils/types';
 import SinglePic from '@/components/Post/SinglePic';
+import SideProfile from '@/components/SideProfile';
+import SingleUser from '@/components/Search/User';
 
 type Props = {
   users: {
-    id: ObjectId;
+    _id: ObjectId;
     name: string;
     image: string;
     description: string;
@@ -40,6 +42,10 @@ const Search = ({ users, serverPosts }: Props) => {
     console.log('yes');
   };
 
+  useEffect(() => {
+    router.replace(router.asPath);
+  }, [router.query.searchInput]);
+
   const fetchPosts = async () => {
     const res = await fetch('/api/post');
     const fetchedPosts = await res.json();
@@ -49,40 +55,15 @@ const Search = ({ users, serverPosts }: Props) => {
   return (
     <main className="flex flex-col shadow-xl shadow-black relative min-h-screen bg-neutral-200 pb-20">
       <Navbar />
-      <div className="mx-60">
-        <h1 className="text-4xl font-bold my-4 sticky top-0">
-          Results for : {router.query.searchInput}
-        </h1>
+      <div
+        className="lg:mx-60 flex
+      flex-col-reverse lg:flex-row my-12 justify-center gap-4"
+      >
+        <div className="h-fit hidden xl:block sticky top-20">
+          <SideProfile />
+        </div>
         <div className=" w-full sm:w-[35rem] mx-auto">
-          <h2 className="text-xl font-bold mb-4">Users</h2>
-          <section className="bg-white border border-neutral-300 px-4 py-6 rounded-md">
-            {users.length > 0 ? (
-              <div>
-                {users.map((user, i) => (
-                  <div key={i} className="flex gap-2">
-                    <div className="relative h-14 w-14 rounded-full overflow-hidden">
-                      <Image
-                        src={user.image}
-                        fill
-                        className="object-cover"
-                        alt="profile"
-                      />
-                    </div>
-                    <div>
-                      <p className="text-lg font-bold">{user.name}</p>
-                      <p className="text-neutral-700">{user.description}</p>
-                    </div>
-                    <button className="rounded-md border border-neutral-700 w-36 h-10 my-auto ml-auto">
-                      View Profile
-                    </button>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-neutral-700">No Users Found</div>
-            )}
-          </section>
-          <h2 className="text-xl font-bold mb-4 mt-6">Posts</h2>
+          <h2 className="text-xl font-bold mb-4">Posts</h2>
           {posts.length > 0 ? (
             <div className="flex flex-col w-full items-center gap-4">
               {posts.map((pic, i) => (
@@ -97,6 +78,20 @@ const Search = ({ users, serverPosts }: Props) => {
           ) : (
             <div>No Posts Found</div>
           )}
+        </div>
+        <div className=" w-full sm:w-[35rem] mx-auto">
+          <h2 className="text-xl font-bold mb-4">Users</h2>
+          <section className="bg-white border border-neutral-300 px-4 py-6 rounded-md">
+            {users.length > 0 ? (
+              <div>
+                {users.map((user, i) => (
+                  <SingleUser key={i} user={user} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-neutral-700">No Users Found</div>
+            )}
+          </section>
         </div>
       </div>
     </main>

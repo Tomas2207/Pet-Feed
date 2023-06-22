@@ -31,6 +31,9 @@ const Navbar = () => {
 
   useEffect(() => {
     window.addEventListener('scroll', changeNavBg);
+    if (router.query.searchInput) {
+      setSearchInput(router.query.searchInput as string);
+    }
   }, []);
 
   return (
