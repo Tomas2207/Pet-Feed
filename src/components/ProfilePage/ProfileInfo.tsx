@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { MdModeEditOutline } from 'react-icons/md';
 import EditProfile from './EditProfile';
 import { ObjectId } from 'mongodb';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 type Profile = {
   profile: {
@@ -22,6 +23,7 @@ const ProfileInfo = ({ profile }: Profile) => {
   const [following, setFollowing] = useState(false);
 
   const [openForm, setOpenForm] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { data: session, update } = useSession();
   const router = useRouter();
@@ -51,27 +53,33 @@ const ProfileInfo = ({ profile }: Profile) => {
     });
   };
   const addFollowing = async (id: ObjectId) => {
-    const res = await fetch(`/api/follow`, {
-      method: 'POST',
-      body: JSON.stringify({
-        otherId: id,
-        hostId: session?.user.id,
-      }),
-      headers: { 'Content-type': 'application/json' },
-    });
+    if (session) {
+      setLoading(true);
+      const res = await fetch(`/api/follow`, {
+        method: 'POST',
+        body: JSON.stringify({
+          otherId: id,
+          hostId: session?.user.id,
+        }),
+        headers: { 'Content-type': 'application/json' },
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    setProfileState({
-      ...profileState,
-      followers: data.addNewFollower.followers,
-      following: data.addNewFollower.following,
-    });
+      setProfileState({
+        ...profileState,
+        followers: data.addNewFollower.followers,
+        following: data.addNewFollower.following,
+      });
 
-    fetchUser();
+      fetchUser();
+    } else {
+      router.push('/signin');
+    }
   };
 
   const removeFollowing = async (id: ObjectId) => {
+    setLoading(true);
     const res = await fetch(`/api/follow`, {
       method: 'PATCH',
       body: JSON.stringify({
@@ -106,6 +114,7 @@ const ProfileInfo = ({ profile }: Profile) => {
       } else if (!profileState.followers.includes(session.user.id)) {
         setFollowing(false);
       }
+      setLoading(false);
     }
   }, [session, profile]);
 
@@ -136,13 +145,13 @@ const ProfileInfo = ({ profile }: Profile) => {
               <div>
                 <p className="font-bold">Followers</p>
                 <p className="text-teal-600 font-bold text-2xl">
-                  {profile.followers.length}
+                  {profileState.followers.length}
                 </p>
               </div>
               <div>
                 <p className="font-bold">Following</p>
                 <p className="text-teal-600 font-bold text-2xl">
-                  {profile.following.length}
+                  {profileState.following.length}
                 </p>
               </div>
             </div>
@@ -158,21 +167,29 @@ const ProfileInfo = ({ profile }: Profile) => {
               </button>
             ) : (
               <div>
-                {following ? (
-                  <button
-                    className="bg-teal-600 text-white px-4 py-2 rounded-lg w-full"
-                    onClick={() => removeFollowing(profile._id)}
-                  >
-                    Following
+                {loading ? (
+                  <button className="bg-teal-600 text-white px-4 py-3 rounded-lg w-full">
+                    <AiOutlineLoading3Quarters className="mx-auto animate-spin text-xl" />
                   </button>
                 ) : (
-                  <button
-                    className="border border-neutral-700 px-4 py-2 rounded-lg w-full
+                  <div>
+                    {following ? (
+                      <button
+                        className="bg-teal-600 text-white px-4 py-2 rounded-lg w-full"
+                        onClick={() => removeFollowing(profile._id)}
+                      >
+                        Following
+                      </button>
+                    ) : (
+                      <button
+                        className="border border-neutral-700 px-4 py-2 rounded-lg w-full
                   text-neutral-700 hover:bg-teal-600 transition duration-150 ease-in-out hover:text-white"
-                    onClick={() => addFollowing(profile._id)}
-                  >
-                    Follow
-                  </button>
+                        onClick={() => addFollowing(profile._id)}
+                      >
+                        Follow
+                      </button>
+                    )}
+                  </div>
                 )}
               </div>
             )}

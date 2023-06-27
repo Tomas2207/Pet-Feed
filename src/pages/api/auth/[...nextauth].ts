@@ -2,10 +2,14 @@ import clientPromise from '../../../../lib/mongodb';
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
+import CredentialsProvider from 'next-auth/providers/credentials';
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter';
 import { ObjectId } from 'mongodb';
+import User from '../../../../models/User';
+import connectMongo from '../../../../utils/connectMongo';
+const bcrypt = require('bcrypt');
+
 export const authOptions: NextAuthOptions = {
-  // Configure one or more authentication providers
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID!,
@@ -40,6 +44,9 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+  pages: {
+    signIn: '/signin',
+  },
   adapter: MongoDBAdapter(clientPromise),
   session: {
     strategy: 'jwt',

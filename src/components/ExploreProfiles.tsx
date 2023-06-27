@@ -1,8 +1,10 @@
 import Image from 'next/image';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ObjectId } from 'mongodb';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 type Props = {
   profiles: {
@@ -15,24 +17,32 @@ type Props = {
 
 const ExploreProfiles = ({ profiles, fetchUser }: Props) => {
   const { data: session } = useSession();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    console.log(session?.user);
-  }, []);
+    setLoading(false);
+  }, [session.user.following]);
 
   const addFollowing = async (id: ObjectId) => {
-    await fetch(`/api/follow`, {
-      method: 'POST',
-      body: JSON.stringify({
-        otherId: id,
-        hostId: session?.user.id,
-      }),
-      headers: { 'Content-type': 'application/json' },
-    });
+    if (session) {
+      setLoading(true);
+      await fetch(`/api/follow`, {
+        method: 'POST',
+        body: JSON.stringify({
+          otherId: id,
+          hostId: session?.user.id,
+        }),
+        headers: { 'Content-type': 'application/json' },
+      });
 
-    fetchUser();
+      fetchUser();
+    } else {
+      router.push('/signin');
+    }
   };
   const removeFollowing = async (id: ObjectId) => {
+    setLoading(true);
     await fetch(`/api/follow`, {
       method: 'PATCH',
       body: JSON.stringify({
@@ -86,20 +96,30 @@ const ExploreProfiles = ({ profiles, fetchUser }: Props) => {
                   </button>
                 ) : (
                   <div className="ml-auto">
-                    {!session?.user?.following?.includes(pic._id.toString()) ? (
-                      <button
-                        className="border border-neutral-300 bg-white py-2 px-6 rounded-xl ml-auto mr-0 text-neutral-600"
-                        onClick={() => addFollowing(pic._id)}
-                      >
-                        Follow
+                    {loading ? (
+                      <button className="border border-neutral-300 w-24 py-2 rounded-xl">
+                        <AiOutlineLoading3Quarters className="mx-auto animate-spin" />
                       </button>
                     ) : (
-                      <button
-                        className="border border-neutral-300 bg-teal-600 py-2 px-6 rounded-xl ml-auto text-white"
-                        onClick={() => removeFollowing(pic._id)}
-                      >
-                        Following
-                      </button>
+                      <div>
+                        {!session?.user?.following?.includes(
+                          pic._id.toString()
+                        ) ? (
+                          <button
+                            className="border border-neutral-300 bg-white py-2 px-6 rounded-xl ml-auto mr-0 text-neutral-600"
+                            onClick={() => addFollowing(pic._id)}
+                          >
+                            Follow
+                          </button>
+                        ) : (
+                          <button
+                            className="border border-neutral-300 bg-teal-600 py-2 px-6 rounded-xl ml-auto text-white"
+                            onClick={() => removeFollowing(pic._id)}
+                          >
+                            Following
+                          </button>
+                        )}
+                      </div>
                     )}
                   </div>
                 )}

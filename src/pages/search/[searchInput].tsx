@@ -10,9 +10,10 @@ import { Author, Comment } from '../../../utils/types';
 import SinglePic from '@/components/Post/SinglePic';
 import SideProfile from '@/components/SideProfile';
 import SingleUser from '@/components/Search/User';
+import Loading from '@/components/Loading';
 
 type Props = {
-  users: {
+  serverUsers: {
     _id: ObjectId;
     name: string;
     image: string;
@@ -33,24 +34,34 @@ type Props = {
   }[];
 };
 
-const Search = ({ users, serverPosts }: Props) => {
+const Search = ({ serverUsers, serverPosts }: Props) => {
   const router = useRouter();
   console.log(serverPosts);
   const [posts, setPosts] = useState(serverPosts);
+  const [users, setUsers] = useState(serverUsers);
+  const [loading, setLoading] = useState(false);
 
   const changePic = (src: string, desc: string) => {
     console.log('yes');
   };
 
   useEffect(() => {
-    router.replace(router.asPath);
+    fetchPosts();
   }, [router.query.searchInput]);
 
   const fetchPosts = async () => {
-    const res = await fetch('/api/post');
-    const fetchedPosts = await res.json();
-    // setPosts(fetchedPosts.posts);
+    setLoading(true);
+    const res = await fetch(
+      `/api/post/searchPosts/${router.query.searchInput}`
+    );
+    const usersAndPosts = await res.json();
+    console.log(usersAndPosts);
+    setPosts(usersAndPosts.results.posts);
+    setUsers(usersAndPosts.results.users);
+    setLoading(false);
   };
+
+  if (loading) return <Loading />;
 
   return (
     <main className="flex flex-col shadow-xl shadow-black relative min-h-screen bg-neutral-200 pb-20">
@@ -63,7 +74,9 @@ const Search = ({ users, serverPosts }: Props) => {
           <SideProfile />
         </div>
         <div className=" w-full sm:w-[35rem] mx-auto">
-          <h2 className="text-xl font-bold mb-4">Posts</h2>
+          <h2 className="text-xl font-bold mb-4 bg-white rounded-md p-2 border border-neutral-300 text-neutral-500">
+            Posts
+          </h2>
           {posts.length > 0 ? (
             <div className="flex flex-col w-full items-center gap-4">
               {posts.map((pic, i) => (
@@ -80,7 +93,9 @@ const Search = ({ users, serverPosts }: Props) => {
           )}
         </div>
         <div className=" w-full sm:w-[35rem] mx-auto">
-          <h2 className="text-xl font-bold mb-4">Users</h2>
+          <h2 className="text-xl font-bold mb-4 bg-white rounded-md p-2 border border-neutral-300 text-neutral-500">
+            Users
+          </h2>
           <section className="bg-white border border-neutral-300 px-4 py-6 rounded-md">
             {users.length > 0 ? (
               <div>
@@ -124,7 +139,7 @@ export const getServerSideProps = async ({ query }: any) => {
 
   return {
     props: {
-      users: users,
+      serverUsers: users,
       serverPosts: posts,
     },
   };

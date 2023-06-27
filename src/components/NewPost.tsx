@@ -86,7 +86,7 @@ const NewPost = ({ open, fetchPosts }: Props) => {
 
   return (
     <div className="absolute top-0 bg-black bg-opacity-90 h-full w-full z-[99]">
-      <div className="w-[29rem] bg-gray-800 sticky right-0 left-0 mx-auto top-[20vh]">
+      <div className="sm:w-[29rem] bg-gray-800 sticky right-0 left-0 mx-auto top-[20vh]">
         <div className="shadow-lg shadow-black bg-white p-2 rounded-md">
           <div className="flex gap-2 my-4">
             <div className="relative h-12 w-12 rounded-xl overflow-hidden">

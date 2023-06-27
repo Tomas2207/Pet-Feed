@@ -47,7 +47,7 @@ const Navbar = () => {
       {/* ---Right------ */}
       <Link
         href="/"
-        className="flex items-end font-bold relative h-12 w-12 overflow-hidden rounded-md"
+        className="flex items-end font-bold relative h-12 w-12 overflow-hidden rounded-md flex-shrink-0"
       >
         <Image src="/app-logo.png" fill alt="logo" className="object-cover" />
       </Link>
@@ -96,11 +96,18 @@ const Navbar = () => {
           </button>
         </form>
       </div>
-      <input
-        type="text"
-        className="border-2 rounded-md text-lg px-2 py-1 outline-none md:hidden w-[50%]"
-        placeholder="search..."
-      />
+      <form
+        className="flex items-center justify-center gap-2 md:hidden"
+        onSubmit={handleFormSubmit}
+      >
+        <input
+          type="text"
+          className="border-2 rounded-md text-lg px-2 py-1 outline-none w-[100%] text-neutral-500 mx-1"
+          placeholder="search..."
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+        />
+      </form>
 
       {/* ----------------- */}
       {/* --- left ------ */}

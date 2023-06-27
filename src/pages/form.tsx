@@ -77,12 +77,14 @@ const Form = () => {
   };
 
   return (
-    <main className="mx-[2rem] flex shadow-xl shadow-black relative items-center min-h-screen bg-neutral-200 h-screen">
+    <main className="flex shadow-xl shadow-black relative items-center min-h-screen bg-neutral-200 h-screen">
+      <div className="w-screen absolute h-2 top-0 bg-teal-600 z-[99]" />
+      <div className="h-28 w-screen absolute top-0 bg-gradient-to-t from-transparent via-teal-500 to-teal-600 lg:hidden" />
       {/* ---Side Banner------ */}
       <SideBanner />
       {/* ---------------------------- */}
       {/*----- Form ---------*/}
-      <div className="flex-1 mx-48">
+      <div className="px-2 flex-1 max-w-[30rem] mx-auto mt-12 lg:mt-0">
         <h2 className="text-4xl mb-16 text-neutral-700 font-bold">
           Complete Your Account
         </h2>

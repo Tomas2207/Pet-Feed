@@ -18,6 +18,7 @@ import CommentSection from './CommentSection';
 import { Comment } from '../../../utils/types';
 import { SlOptions } from 'react-icons/sl';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 TimeAgo.addDefaultLocale(en);
 
@@ -57,6 +58,8 @@ const SinglePic = ({ pic, changePic, fetchPosts }: Props) => {
 
   const { data: session, update } = useSession();
 
+  const router = useRouter();
+
   useEffect(() => {
     checkLiked();
   }, [session, pic, fetchPosts]);
@@ -92,43 +95,50 @@ const SinglePic = ({ pic, changePic, fetchPosts }: Props) => {
   };
 
   const savePost = async () => {
-    setLoadingSave(true);
-    const res = await fetch('/api/post/save', {
-      method: 'POST',
-      body: JSON.stringify({
-        postId: pic._id,
-        userId: session?.user.id,
-      }),
-      headers: { 'Content-type': 'application/json' },
-    });
-    const data = await res.json();
-    console.log(data);
-    update({
-      user: {
-        ...session?.user,
-        savedPosts: data.userAddPost.savedPosts,
-      },
-    });
-    // update({ ['user.savedPosts']: data.userAddPost.savedPosts });
+    if (session) {
+      setLoadingSave(true);
+      const res = await fetch('/api/post/save', {
+        method: 'POST',
+        body: JSON.stringify({
+          postId: pic._id,
+          userId: session?.user.id,
+        }),
+        headers: { 'Content-type': 'application/json' },
+      });
+      const data = await res.json();
+      console.log(data);
+      update({
+        user: {
+          ...session?.user,
+          savedPosts: data.userAddPost.savedPosts,
+        },
+      });
 
-    setLoadingSave(false);
-    setSaved(true);
+      setLoadingSave(false);
+      setSaved(true);
+    } else {
+      router.push('/signin');
+    }
   };
 
   const likePost = async () => {
-    setLoading(true);
-    const res = await fetch('/api/post/likes', {
-      method: 'POST',
-      body: JSON.stringify({
-        postId: pic._id,
-        likeId: session?.user.id,
-      }),
-      headers: { 'Content-type': 'application/json' },
-    });
-    const data = await res.json();
-    setPostLikes(data.likes);
-    setLoading(false);
-    setLiked(true);
+    if (session) {
+      setLoading(true);
+      const res = await fetch('/api/post/likes', {
+        method: 'POST',
+        body: JSON.stringify({
+          postId: pic._id,
+          likeId: session?.user.id,
+        }),
+        headers: { 'Content-type': 'application/json' },
+      });
+      const data = await res.json();
+      setPostLikes(data.likes);
+      setLoading(false);
+      setLiked(true);
+    } else {
+      router.push('/signin');
+    }
   };
 
   const removeSavedPost = async () => {

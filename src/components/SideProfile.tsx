@@ -23,16 +23,16 @@ const SideProfile = () => {
           </div>
         ) : null}
         {/* Picture */}
-
-        <div className="h-32 w-32 relative rounded-full overflow-hidden mt-6">
-          <Image
-            src={session ? (session.user.image as string) : '/petIcon.png'}
-            fill
-            className="object-cover"
-            alt="side-profile"
-          />
-        </div>
-
+        <Link href={session ? `/profile/${session?.user.id}` : '/signin'}>
+          <div className="h-32 w-32 relative rounded-full overflow-hidden mt-6">
+            <Image
+              src={session ? (session.user.image as string) : '/petIcon.png'}
+              fill
+              className="object-cover"
+              alt="side-profile"
+            />
+          </div>
+        </Link>
         {/* ------------ */}
         {session ? (
           <div className="font-bold">

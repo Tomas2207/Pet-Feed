@@ -6,6 +6,8 @@ import { BsFillSendFill } from 'react-icons/bs';
 import { Comment as CommentType } from '../../../utils/types';
 import { BiDownArrow } from 'react-icons/bi';
 import SingleComment from './SingleComment';
+import { FaSignInAlt } from 'react-icons/fa';
+import { useRouter } from 'next/router';
 
 type Props = {
   postId: ObjectId;
@@ -23,6 +25,7 @@ type Props = {
 
 const Comment = ({ postId, comments }: Props) => {
   const { data: session } = useSession();
+  const router = useRouter();
 
   const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(false);
@@ -61,37 +64,50 @@ const Comment = ({ postId, comments }: Props) => {
 
   return (
     <div className="w-full px-2 pb-2 flex flex-col gap-2">
-      <div className="flex gap-2">
-        <div className="h-12 w-12 relative rounded-md overflow-hidden">
-          <Image
-            src={session?.user.image as string}
-            fill
-            className="object-cover"
-            alt="comment"
-          />
-        </div>
-        <form className="flex w-full gap-1" onSubmit={(e) => publishComment(e)}>
-          <input
-            type="text"
-            className="border border-neutral-300 flex-1 rounded-md px-2 outline-none"
-            placeholder="Add a comment..."
-            value={comment}
-            readOnly={loading}
-            onChange={(e) => setComment(e.target.value)}
-          />
-          <button
-            className={
-              !comment || loading
-                ? 'bg-teal-600 text-white rounded-md bg-opacity-40 px-1 w-16 flex items-center justify-center'
-                : 'bg-teal-600 text-white px-1 rounded-md w-16 flex items-center justify-center'
-            }
-            disabled={!comment || loading}
-            type="submit"
+      {session ? (
+        <div className="flex gap-2">
+          <div className="h-12 w-12 relative rounded-md overflow-hidden">
+            <Image
+              src={session?.user.image as string}
+              fill
+              className="object-cover"
+              alt="comment"
+            />
+          </div>
+          <form
+            className="flex w-full gap-1"
+            onSubmit={(e) => publishComment(e)}
           >
-            <BsFillSendFill className="text-xl rotate-45 mr-2" />
-          </button>
-        </form>
-      </div>
+            <input
+              type="text"
+              className="border border-neutral-300 flex-1 rounded-md px-2 outline-none"
+              placeholder="Add a comment..."
+              value={comment}
+              readOnly={loading}
+              onChange={(e) => setComment(e.target.value)}
+            />
+            <button
+              className={
+                !comment || loading
+                  ? 'bg-teal-600 text-white rounded-md bg-opacity-40 px-1 w-16 flex items-center justify-center'
+                  : 'bg-teal-600 text-white px-1 rounded-md w-16 flex items-center justify-center'
+              }
+              disabled={!comment || loading}
+              type="submit"
+            >
+              <BsFillSendFill className="text-xl rotate-45 mr-2" />
+            </button>
+          </form>
+        </div>
+      ) : (
+        <button
+          className="p-2 border border-neutral-300 rounded-md hover:bg-neutral-200 flex items-center justify-center gap-2"
+          onClick={() => router.push('/signin')}
+        >
+          Sign In to Comment
+          <FaSignInAlt />
+        </button>
+      )}
       {currentComments.length > 0 ? (
         <div className="flex flex-col gap-2">
           {!moreComments ? (

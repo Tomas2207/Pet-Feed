@@ -13,6 +13,7 @@ import User from '../../models/User';
 import { ObjectId } from 'mongodb';
 import { Author, Comment } from '../../utils/types';
 import LatestPost from '@/components/LatestPost';
+import Loading from '@/components/Loading';
 
 type Props = {
   users: {
@@ -83,7 +84,7 @@ const Index = ({ serverPosts, users }: Props) => {
   const [openNewPost, setOpenNewPost] = useState(false);
   const [openZoom, setOpenZoom] = useState(false);
 
-  if (session && !session?.user.followers) return <div>Loading...</div>;
+  if (session && !session?.user.followers) return <Loading />;
 
   return (
     <main className="flex flex-col items-center shadow-xl shadow-black relative min-h-screen bg-neutral-200 pb-20">
