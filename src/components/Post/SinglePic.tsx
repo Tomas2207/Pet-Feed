@@ -8,17 +8,28 @@ import ReactTimeAgo from 'react-time-ago';
 import {
   AiFillHeart,
   AiOutlineHeart,
+  AiOutlineLink,
   AiOutlineLoading3Quarters,
 } from 'react-icons/ai';
 import { BiShareAlt } from 'react-icons/bi';
 import { TbMessageCircle2, TbMessageCircle2Filled } from 'react-icons/tb';
-import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
+import {
+  BsBookmark,
+  BsBookmarkFill,
+  BsFillBookmarkFill,
+  BsFillFlagFill,
+} from 'react-icons/bs';
 import Image from 'next/image';
 import CommentSection from './CommentSection';
 import { Comment } from '../../../utils/types';
 import { SlOptions } from 'react-icons/sl';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import OptionDropdown from './OptionDropdown';
+import { toast } from 'react-hot-toast';
+import { FacebookIcon, FacebookShareButton } from 'react-share';
+import ShareSection from './ShareSection';
+import { Comment as CommentType } from '../../../utils/types';
 
 TimeAgo.addDefaultLocale(en);
 
@@ -53,6 +64,9 @@ const SinglePic = ({ pic, changePic, fetchPosts }: Props) => {
   const [loading, setLoading] = useState(false);
   const [loadingSave, setLoadingSave] = useState(false);
   const [postLikes, setPostLikes] = useState([...pic.likes]);
+  const [openDropdown, setOpenDropdown] = useState(false);
+  const [showShare, setShowShare] = useState(false);
+  const [currentComments, setCurrentComments] = useState<CommentType[]>([]);
 
   const [displayComments, setDisplayComments] = useState(false);
 
@@ -66,7 +80,7 @@ const SinglePic = ({ pic, changePic, fetchPosts }: Props) => {
 
   useEffect(() => {
     checkSaved();
-  }, []);
+  }, [session, pic]);
 
   useEffect(() => {
     setPostLikes([...pic.likes]);
@@ -89,6 +103,9 @@ const SinglePic = ({ pic, changePic, fetchPosts }: Props) => {
     if (session) {
       if (session.user.savedPosts.includes(pic._id.toString())) {
         setSaved(true);
+        console.log('it does');
+      } else {
+        setSaved(false);
       }
     }
     setLoadingSave(false);
@@ -116,6 +133,7 @@ const SinglePic = ({ pic, changePic, fetchPosts }: Props) => {
 
       setLoadingSave(false);
       setSaved(true);
+      toast.success('Post Saved');
     } else {
       router.push('/signin');
     }
@@ -163,6 +181,7 @@ const SinglePic = ({ pic, changePic, fetchPosts }: Props) => {
     // update({ ['user.savedPosts']: data.userRemovePost.savedPosts });
     setLoadingSave(false);
     setSaved(false);
+    toast.success('Post Removed');
   };
 
   const removeLike = async () => {
@@ -182,7 +201,7 @@ const SinglePic = ({ pic, changePic, fetchPosts }: Props) => {
   };
 
   return (
-    <div className="bg-white rounded-xl w-full sm:w-[35rem] h-fit border border-neutral-300">
+    <div className="bg-white rounded-xl w-full sm:w-[35rem] h-fit border border-neutral-300 relative">
       <div className="flex gap-2 my-4 p-2">
         <Link
           href={`/profile/${pic.userId._id}`}
@@ -201,7 +220,16 @@ const SinglePic = ({ pic, changePic, fetchPosts }: Props) => {
             <ReactTimeAgo date={pic.createdAt} locale="en-US" />
           </p>
         </div>
-        <SlOptions className="ml-auto text-xl mr-2" />
+        <SlOptions
+          className="ml-auto text-xl mr-2 cursor-pointer"
+          onClick={() => setOpenDropdown(!openDropdown)}
+        />
+        {openDropdown ? (
+          <OptionDropdown
+            id={pic._id.toString()}
+            setOpenDropdown={setOpenDropdown}
+          />
+        ) : null}
       </div>
       <p className="text-md px-4 pb-4 break-all">{pic.description}</p>
       {pic.img ? (
@@ -233,12 +261,12 @@ const SinglePic = ({ pic, changePic, fetchPosts }: Props) => {
                 <div>
                   {liked ? (
                     <AiFillHeart
-                      className="z-2 relative text-red-600"
+                      className="z-2 relative text-red-600 cursor-pointer"
                       onClick={() => removeLike()}
                     />
                   ) : (
                     <AiOutlineHeart
-                      className="z-2 relative hover:animate-pulse hover:text-red-600 transition-all duration-150"
+                      className="z-2 relative hover:animate-pulse hover:text-red-600 transition-all duration-150 cursor-pointer"
                       onClick={() => likePost()}
                     />
                   )}
@@ -254,17 +282,23 @@ const SinglePic = ({ pic, changePic, fetchPosts }: Props) => {
             <div>
               {displayComments ? (
                 <TbMessageCircle2Filled
-                  className="z-2 relative text-teal-600 transition duration-150 hover:text-teal-500 ease-in-out"
+                  className="z-2 relative text-teal-600 transition duration-150 hover:text-teal-500 ease-in-out cursor-pointer"
                   onClick={() => setDisplayComments(!displayComments)}
                 />
               ) : (
                 <TbMessageCircle2
-                  className="z-2 relative hover:text-teal-600 transition duration-150 ease-in-out"
+                  className="z-2 relative hover:text-teal-600 transition duration-150 ease-in-out cursor-pointer"
                   onClick={() => setDisplayComments(!displayComments)}
                 />
               )}
             </div>
-            <BiShareAlt className="z-2 relative" />
+
+            <div className="flex gap-2 items-center group h-full relative">
+              <BiShareAlt className="z-2 relative cursor-pointer hover:text-teal-600 transition duration-150" />
+              <div className="overflow-hidden w-0 group-hover:w-80 transition-all duration-500">
+                <ShareSection id={pic._id.toString()} picUrl={pic.img} />
+              </div>
+            </div>
           </div>
           {loadingSave ? (
             <AiOutlineLoading3Quarters className="animate-spin text-teal-600 ml-auto" />
@@ -290,6 +324,8 @@ const SinglePic = ({ pic, changePic, fetchPosts }: Props) => {
           postId={pic._id}
           comments={pic.comments}
           fetchPosts={fetchPosts}
+          currentComments={currentComments}
+          setCurrentComments={setCurrentComments}
         />
       ) : null}
     </div>

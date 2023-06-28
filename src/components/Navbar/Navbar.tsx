@@ -11,6 +11,7 @@ import {
 import { FiSearch } from 'react-icons/fi';
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { BsBookmarkFill } from 'react-icons/bs';
 
 const Navbar = () => {
   const [changeNav, setChangeNav] = useState(false);
@@ -25,6 +26,14 @@ const Navbar = () => {
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     router.push(`/search/${searchInput}`);
+  };
+
+  const handleGoToProfile = () => {
+    if (session) {
+      router.push(`/profile/${session.user.id}`);
+    } else {
+      router.push('/signin');
+    }
   };
 
   const { data: session } = useSession();
@@ -73,11 +82,12 @@ const Navbar = () => {
               : 'text-white hover:text-teal-600 transition-all duration-150 cursor-pointer ease-in-out'
           }
         />
-        <AiFillHeart
+        <BsBookmarkFill
+          onClick={handleGoToProfile}
           className={
             !changeNav
-              ? 'hover:text-teal-600 transition-all duration-150 cursor-pointer ease-in-out'
-              : 'text-white hover:text-teal-600 transition-all duration-150 cursor-pointer ease-in-out'
+              ? 'hover:text-teal-600 transition-all duration-150 cursor-pointer ease-in-out text-2xl'
+              : 'text-white hover:text-teal-600 transition-all duration-150 cursor-pointer ease-in-out text-2xl'
           }
         />
         <form

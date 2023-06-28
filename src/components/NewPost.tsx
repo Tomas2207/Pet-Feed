@@ -1,9 +1,11 @@
+import EmojiPicker from 'emoji-picker-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { AiFillLike, AiOutlineComment, AiOutlineLike } from 'react-icons/ai';
 import { BiShareAlt } from 'react-icons/bi';
+import { BsFillEmojiLaughingFill } from 'react-icons/bs';
 import { FaComment, FaPollH, FaShareAlt } from 'react-icons/fa';
 import { MdArticle, MdInsertPhoto } from 'react-icons/md';
 import { RiVideoFill } from 'react-icons/ri';
@@ -20,6 +22,7 @@ const NewPost = ({ open, fetchPosts }: Props) => {
   const [description, setDescription] = useState('');
   const [videoFile, setVideoFile] = useState();
   const [videoSrc, setVideoSrc] = useState('');
+  const [showEmojis, setShowEmojis] = useState(false);
 
   const router = useRouter();
 
@@ -84,10 +87,15 @@ const NewPost = ({ open, fetchPosts }: Props) => {
     }
   };
 
+  const addEmoji = (e: any, emojiData: any) => {
+    console.log(emojiData);
+    setDescription(description + emojiData.emoji);
+  };
+
   return (
     <div className="absolute top-0 bg-black bg-opacity-90 h-full w-full z-[99]">
       <div className="sm:w-[29rem] bg-gray-800 sticky right-0 left-0 mx-auto top-[20vh]">
-        <div className="shadow-lg shadow-black bg-white p-2 rounded-md">
+        <div className="shadow-lg shadow-black bg-white p-2 rounded-md relative">
           <div className="flex gap-2 my-4">
             <div className="relative h-12 w-12 rounded-xl overflow-hidden">
               <Image
@@ -108,14 +116,27 @@ const NewPost = ({ open, fetchPosts }: Props) => {
 
           {/* Upload file */}
           <form onSubmit={handleSubmitFile} className="flex flex-col gap-5">
-            <input
-              type="text"
-              autoFocus
-              className="px-2 py-2 outline-none"
-              placeholder="Something in mind?"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
+            <div className="flex items-center">
+              <input
+                type="text"
+                autoFocus
+                className="px-2 py-2 outline-none flex-1"
+                placeholder="Something in mind?"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+              <BsFillEmojiLaughingFill
+                className="text-neutral-500 text-xl cursor-pointer"
+                onClick={() => setShowEmojis(!showEmojis)}
+              />
+              {showEmojis ? (
+                <div className="absolute top-40 right-0">
+                  <EmojiPicker
+                    onEmojiClick={(emojiData, e) => addEmoji(e, emojiData)}
+                  />
+                </div>
+              ) : null}
+            </div>
             <div className="flex mb-2 items-center justify-between gap-2">
               {/* Image & Video buttons */}
               <div className="flex items-center justify-between my-1 gap-4">

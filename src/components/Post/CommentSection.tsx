@@ -2,39 +2,47 @@ import { ObjectId } from 'mongodb';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import { BsFillSendFill } from 'react-icons/bs';
+import { BsFillEmojiLaughingFill, BsFillSendFill } from 'react-icons/bs';
 import { Comment as CommentType } from '../../../utils/types';
 import { BiDownArrow } from 'react-icons/bi';
 import SingleComment from './SingleComment';
 import { FaSignInAlt } from 'react-icons/fa';
 import { useRouter } from 'next/router';
+import EmojiPicker from 'emoji-picker-react';
 
 type Props = {
   postId: ObjectId;
-  comments: {
-    author: {
-      _id: ObjectId;
-      name: string;
-      image: string;
-    };
-    createdAt: Date;
-    content: string;
-  }[];
+  comments: CommentType[];
   fetchPosts: Function;
+  currentComments: CommentType[];
+  setCurrentComments: Function;
 };
 
-const Comment = ({ postId, comments }: Props) => {
+const Comment = ({
+  postId,
+  comments,
+  currentComments,
+  setCurrentComments,
+}: Props) => {
   const { data: session } = useSession();
   const router = useRouter();
 
   const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showEmojis, setShowEmojis] = useState(false);
 
-  const [currentComments, setCurrentComments] = useState<CommentType[]>([]);
+  const addEmoji = (e: any, emojiData: any) => {
+    console.log(emojiData);
+    setComment(comment + emojiData.emoji);
+  };
+
   const [moreComments, setMoreComments] = useState(false);
 
   useEffect(() => {
-    if (comments.length > 0) setCurrentComments([...comments].reverse());
+    if (comments.length > 0 && currentComments.length === 0)
+      setCurrentComments([...comments].reverse());
+    else if (currentComments.length > 0)
+      setCurrentComments([...currentComments]);
   }, []);
 
   const changeCurentComments = () => {
@@ -43,6 +51,7 @@ const Comment = ({ postId, comments }: Props) => {
 
   const publishComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setShowEmojis(false);
     setLoading(true);
     const res = await fetch('/api/post/comment', {
       method: 'POST',
@@ -75,7 +84,7 @@ const Comment = ({ postId, comments }: Props) => {
             />
           </div>
           <form
-            className="flex w-full gap-1"
+            className="flex w-full gap-1 relative"
             onSubmit={(e) => publishComment(e)}
           >
             <input
@@ -86,6 +95,17 @@ const Comment = ({ postId, comments }: Props) => {
               readOnly={loading}
               onChange={(e) => setComment(e.target.value)}
             />
+            <BsFillEmojiLaughingFill
+              className="text-neutral-500 text-xl cursor-pointer my-auto h-full w-12 px-3 border border-neutral-300 rounded-md"
+              onClick={() => setShowEmojis(!showEmojis)}
+            />
+            {showEmojis ? (
+              <div className="absolute top-12 right-0 z-[99]">
+                <EmojiPicker
+                  onEmojiClick={(emojiData, e) => addEmoji(e, emojiData)}
+                />
+              </div>
+            ) : null}
             <button
               className={
                 !comment || loading

@@ -19,6 +19,17 @@ type Profile = {
     image: string;
     followers: string[];
     following: string[];
+    savedPosts: {
+      _id: ObjectId;
+      userId: Author;
+      img: string;
+      description: string;
+      createdAt: Date;
+      updatedAt: Date;
+      likes: Author[];
+
+      comments: Comment[];
+    }[];
   };
 
   serverPosts: {
@@ -40,8 +51,12 @@ export default function ProfilePage({ profile, serverPosts }: Profile) {
   const { data: session } = useSession();
   const [posts, setPosts] = useState(serverPosts);
   const router = useRouter();
+  const [showSavedPosts, setShowSavedPosts] = useState(false);
+
+  console.log(profile);
 
   const user = profile;
+  const savedPosts = user.savedPosts.reverse();
 
   const fetchPosts = async () => {
     const res = await fetch(`/api/post/userPosts/${router.query.profileId}`);
@@ -72,28 +87,76 @@ export default function ProfilePage({ profile, serverPosts }: Profile) {
         <ProfileInfo profile={user} />
 
         <div className="mt-16">
-          <div className="text-neutral-800 flex gap-2 border border-b-teal-600 w-fit pb-2 mx-1">
-            <p>Posts</p>
-            <p className="bg-teal-600 px-2 rounded-md text-white">
-              {posts?.length}
-            </p>
+          <div className="flex">
+            <div
+              className={
+                !showSavedPosts
+                  ? 'text-neutral-800 flex gap-2 border border-b-teal-600 w-fit pb-2 mx-1 cursor-pointer'
+                  : 'text-neutral-800 flex gap-2  w-fit pb-2 mx-1 cursor-pointer'
+              }
+              onClick={() => setShowSavedPosts(false)}
+            >
+              <p>Posts</p>
+              <p className="bg-teal-600 px-2 rounded-md text-white">
+                {posts?.length}
+              </p>
+            </div>
+            <div
+              className={
+                showSavedPosts
+                  ? 'text-neutral-800 flex gap-2 border border-b-teal-600 w-fit pb-2 mx-1 cursor-pointer'
+                  : 'text-neutral-800 flex gap-2  w-fit pb-2 mx-1 cursor-pointer'
+              }
+              onClick={() => setShowSavedPosts(true)}
+            >
+              <p>Saved Posts</p>
+              <p className="bg-teal-600 px-2 rounded-md text-white">
+                {user.savedPosts?.length}
+              </p>
+            </div>
           </div>
           <div className="w-full h-[1px] bg-gray-500 bg-opacity-20 mb-6" />
-          <div className="gap-1 2xl:columns-2 space-y-4">
-            {posts.map((pic, i) => (
-              <SinglePic
-                key={i}
-                pic={pic}
-                changePic={changePic}
-                fetchPosts={fetchPosts}
-              />
-            ))}
-          </div>
-          {posts.length === 0 ? (
-            <div className="w-[50vw] px-6 text-neutral-600">
-              {user?.name} has no posts yet
-            </div>
-          ) : null}
+          {!showSavedPosts ? (
+            <>
+              <div className="gap-1 2xl:columns-2 space-y-4 h-fit">
+                {posts.map((pic, i) => (
+                  <div key={i} className="break-inside-avoid-column">
+                    <SinglePic
+                      pic={pic}
+                      changePic={changePic}
+                      fetchPosts={fetchPosts}
+                    />
+                  </div>
+                ))}
+              </div>
+              {posts.length === 0 ? (
+                <div className="w-[50vw] px-6 text-neutral-600">
+                  {user?.name} has no posts yet
+                </div>
+              ) : null}
+            </>
+          ) : (
+            <>
+              <div className="gap-1 2xl:columns-2 space-y-4 h-fit">
+                {savedPosts.map((pic, i) => (
+                  <div key={i} className="break-inside-avoid-column">
+                    <SinglePic
+                      pic={pic}
+                      changePic={changePic}
+                      fetchPosts={fetchPosts}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {posts.length === 0 ? (
+                <div className="w-[50vw] px-6 text-neutral-600">
+                  {user?.name} has no posts yet
+                </div>
+              ) : null}
+            </>
+          )}
+          {/* ---end of saved posts --- */}
         </div>
       </div>
     </main>
@@ -105,14 +168,25 @@ export const getServerSideProps = async ({ query }: any) => {
 
   let id = new ObjectId(query.profileId);
 
-  const profile = JSON.parse(JSON.stringify(await User.findById(id)));
+  const profile = JSON.parse(
+    JSON.stringify(
+      await User.findById(id).populate({
+        path: 'savedPosts',
+        populate: [
+          { path: 'userId', model: 'User' },
+          { path: 'comments.author', model: 'User' },
+          { path: 'likes', model: 'User' },
+        ],
+      })
+    )
+  );
 
   console.log('a', profile);
 
   const posts = JSON.parse(
     JSON.stringify(
       await Post.find({ userId: id })
-        .populate({ path: 'userId', model: User })
+        .populate({ path: 'userId', model: 'User' })
         .populate({ path: 'comments.author', model: 'User' })
         .populate({ path: 'likes', model: 'User' })
     )

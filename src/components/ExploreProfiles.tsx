@@ -22,7 +22,7 @@ const ExploreProfiles = ({ profiles, fetchUser }: Props) => {
 
   useEffect(() => {
     setLoading(false);
-  }, [session.user.following]);
+  }, [session]);
 
   const addFollowing = async (id: ObjectId) => {
     if (session) {
@@ -91,7 +91,10 @@ const ExploreProfiles = ({ profiles, fetchUser }: Props) => {
                   <p className="text-neutral-500 text-sm">Active Recently</p>
                 </div>
                 {session?.user.id === pic._id.toString() ? (
-                  <button className="border border-neutral-300 bg-white py-2 px-6 rounded-xl ml-auto mr-0 text-neutral-600">
+                  <button
+                    className="border border-neutral-300 bg-white py-2 px-6 rounded-xl ml-auto mr-0 text-neutral-600"
+                    onClick={() => router.push(`profile/${session.user.id}`)}
+                  >
                     Me
                   </button>
                 ) : (
