@@ -24,6 +24,7 @@ export default async function handler(
           newPost = Post.create({
             userId: req.body.userId,
             img: uploadedResponse.secure_url,
+            image_public_id: uploadedResponse.public_id,
             description: req.body.description,
           });
         } else if (req.body.type === 'video') {
@@ -35,6 +36,7 @@ export default async function handler(
           newPost = Post.create({
             userId: req.body.userId,
             video: uploadedResponse.secure_url,
+            image_public_id: uploadedResponse.public_id,
             description: req.body.description,
           });
         }

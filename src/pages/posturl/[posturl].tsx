@@ -48,12 +48,18 @@ const Search = ({ serverPost }: Props) => {
           <h2 className="text-xl font-bold mb-4 bg-white rounded-md p-2 border border-neutral-300 text-neutral-500">
             Posts
           </h2>
-          <SinglePic
-            key={serverPost._id.toString()}
-            pic={serverPost}
-            changePic={changePic}
-            fetchPosts={fetchPosts}
-          />
+          {serverPost ? (
+            <SinglePic
+              key={serverPost._id.toString()}
+              pic={serverPost}
+              changePic={changePic}
+              fetchPosts={fetchPosts}
+            />
+          ) : (
+            <div className="bg-white p-2 text-neutral-500 rounded-md border border-neutral-300">
+              No post found
+            </div>
+          )}
         </div>
       </div>
     </main>

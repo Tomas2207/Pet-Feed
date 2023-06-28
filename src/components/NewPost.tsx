@@ -130,7 +130,7 @@ const NewPost = ({ open, fetchPosts }: Props) => {
                 onClick={() => setShowEmojis(!showEmojis)}
               />
               {showEmojis ? (
-                <div className="absolute top-40 right-0">
+                <div className="absolute top-40 right-0 z-[99]">
                   <EmojiPicker
                     onEmojiClick={(emojiData, e) => addEmoji(e, emojiData)}
                   />

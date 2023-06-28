@@ -228,6 +228,7 @@ const SinglePic = ({ pic, changePic, fetchPosts }: Props) => {
           <OptionDropdown
             id={pic._id.toString()}
             setOpenDropdown={setOpenDropdown}
+            userId={pic.userId._id.toString()}
           />
         ) : null}
       </div>

@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { Author, Comment } from '../../utils/types';
 import { AiFillHeart } from 'react-icons/ai';
 import { SlOptions } from 'react-icons/sl';
+import { useRouter } from 'next/router';
 
 type Post = {
   _id: ObjectId;
@@ -38,6 +39,9 @@ type Posts = {
 const LatestPost = ({ posts }: Posts) => {
   const { data: session } = useSession();
   const [currentLastPost, setCurrentLastPost] = useState<Post | undefined>();
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     const getLastPost = async () => {
@@ -52,10 +56,25 @@ const LatestPost = ({ posts }: Posts) => {
   }, [session, posts]);
 
   return (
-    <div className="h-fit w-[23rem] bg-white px-4 rounded-xl hidden lg:flex flex-col border border-neutral-300 mt-2">
+    <div className="h-fit w-[23rem] bg-white px-4 rounded-xl hidden lg:flex flex-col border border-neutral-300 mt-2 relative">
       <div className="my-4 flex items-center">
         <h3 className="text-xl font-bold text-neutral-500">Latest Post</h3>
-        <SlOptions className="ml-auto" />
+        {currentLastPost ? (
+          <SlOptions
+            className="ml-auto cursor-pointer"
+            onClick={() => setShowDropdown(!showDropdown)}
+          />
+        ) : null}
+        {showDropdown ? (
+          <div className="bg-neutral-800 text-white rounded-md absolute top-10 right-5 overflow-hidden z-[99]">
+            <button
+              className="hover:bg-neutral-700 p-2"
+              onClick={() => router.push(`/posturl/${currentLastPost._id}`)}
+            >
+              See Post
+            </button>
+          </div>
+        ) : null}
       </div>
       {currentLastPost ? (
         <div>
