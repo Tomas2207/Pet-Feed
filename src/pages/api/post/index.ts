@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import cloudinary from '../../../../utils/cloudinary';
 import connectMongo from '../../../../utils/connectMongo';
 import Post from '../../../../models/Post';
+import User from '../../../../models/User';
 
 export default async function handler(
   req: NextApiRequest,
@@ -50,9 +51,9 @@ export default async function handler(
 
     case 'GET':
       let posts = await Post.find()
-        .populate('userId')
-        .populate('comments.author')
-        .populate('likes');
+        .populate({ path: 'userId', model: 'User' })
+        .populate({ path: 'comments.author', model: 'User' })
+        .populate({ path: 'likes', model: 'User' });
 
       posts = posts.reverse();
       res.json({ posts });

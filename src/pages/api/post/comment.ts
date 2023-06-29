@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import connectMongo from '../../../../utils/connectMongo';
 import Post from '../../../../models/Post';
+import User from '../../../../models/User';
 import { ObjectId } from 'mongodb';
 
 export default async function handler(
@@ -23,9 +24,10 @@ export default async function handler(
 
       await newComment.save();
 
-      newComment = await Post.findById(req.body.postId).populate(
-        'comments.author'
-      );
+      newComment = await Post.findById(req.body.postId).populate({
+        path: 'comments.author',
+        model: 'User',
+      });
 
       res.json({ newComment: newComment.comments });
       break;

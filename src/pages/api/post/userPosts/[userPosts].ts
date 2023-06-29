@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import connectMongo from '../../../../../utils/connectMongo';
 import Post from '../../../../../models/Post';
+import User from '../../../../../models/User';
 import { ObjectId } from 'mongodb';
 
 export default async function handler(
@@ -14,9 +15,9 @@ export default async function handler(
       const id = new ObjectId(req.query.userPosts as string);
 
       let userPosts = await Post.find({ userId: id })
-        .populate('userId')
-        .populate('comments.author')
-        .populate('likes');
+        .populate({ path: 'userId', model: 'User' })
+        .populate({ path: 'comments.author', model: 'User' })
+        .populate({ path: 'likes', model: 'User' });
 
       res.json({ userPosts });
       break;

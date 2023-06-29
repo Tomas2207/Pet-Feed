@@ -134,7 +134,7 @@ export const getServerSideProps = async () => {
   const posts = JSON.parse(
     JSON.stringify(
       await Post.find()
-        .populate({ path: 'userId', model: User })
+        .populate({ path: 'userId', model: 'User' })
         .populate({ path: 'comments.author', model: 'User' })
         .populate({ path: 'likes', model: 'User' })
     )
