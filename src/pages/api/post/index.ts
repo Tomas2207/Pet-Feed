@@ -51,9 +51,9 @@ export default async function handler(
 
     case 'GET':
       let posts = await Post.find()
-        .populate({ path: 'userId', model: 'users' })
-        .populate({ path: 'comments.author', model: 'users' })
-        .populate({ path: 'likes', model: 'users' });
+        .populate({ path: 'userId', model: User })
+        .populate({ path: 'comments.author', model: User })
+        .populate({ path: 'likes', model: User });
 
       posts = posts.reverse();
       res.json({ posts });
