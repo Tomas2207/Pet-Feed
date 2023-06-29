@@ -48,7 +48,7 @@ const Index = ({ serverPosts, users }: Props) => {
   const fetchPosts = async () => {
     const res = await fetch('/api/post');
     const fetchedPosts = await res.json();
-    setPosts(fetchedPosts.posts);
+    setPosts([...fetchedPosts.posts]);
   };
 
   const fetchUser = async () => {

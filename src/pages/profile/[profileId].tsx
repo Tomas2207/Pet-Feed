@@ -149,9 +149,9 @@ export default function ProfilePage({ profile, serverPosts }: Profile) {
                 ))}
               </div>
 
-              {posts.length === 0 ? (
+              {savedPosts.length === 0 ? (
                 <div className="w-[50vw] px-6 text-neutral-600">
-                  {user?.name} has no posts yet
+                  No saved Posts
                 </div>
               ) : null}
             </>

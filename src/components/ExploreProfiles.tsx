@@ -92,7 +92,7 @@ const ExploreProfiles = ({ profiles, fetchUser }: Props) => {
                 </div>
                 {session?.user.id === pic._id.toString() ? (
                   <button
-                    className="border border-neutral-300 bg-white py-2 px-6 rounded-xl ml-auto mr-0 text-neutral-600"
+                    className="border border-neutral-300 bg-white py-2 px-6 rounded-xl ml-auto mr-0 text-neutral-600 hover:scale-105 transition duration-150"
                     onClick={() => router.push(`profile/${session.user.id}`)}
                   >
                     Me
@@ -109,14 +109,14 @@ const ExploreProfiles = ({ profiles, fetchUser }: Props) => {
                           pic._id.toString()
                         ) ? (
                           <button
-                            className="border border-neutral-300 bg-white py-2 px-6 rounded-xl ml-auto mr-0 text-neutral-600"
+                            className="border border-neutral-300 bg-white py-2 px-6 rounded-xl ml-auto mr-0 text-neutral-600 hover:scale-105 transition duration-150"
                             onClick={() => addFollowing(pic._id)}
                           >
                             Follow
                           </button>
                         ) : (
                           <button
-                            className="border border-neutral-300 bg-teal-600 py-2 px-6 rounded-xl ml-auto text-white"
+                            className="border border-neutral-300 bg-teal-600 py-2 px-6 rounded-xl ml-auto text-white hover:brightness-110 transition duration-150 hover:scale-105"
                             onClick={() => removeFollowing(pic._id)}
                           >
                             Following

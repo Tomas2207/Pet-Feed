@@ -54,7 +54,7 @@ const SideProfile = () => {
       <div className="w-full h-[1px] bg-neutral-800 bg-opacity-20 mb-3" />
       <Link
         href={session ? `/profile/${session?.user.id}` : '/api/auth/signin'}
-        className="bg-teal-600 w-full py-3 mb-3 rounded-xl text-white"
+        className="bg-teal-600 w-full py-3 mb-3 rounded-xl text-white hover:brightness-110 transition"
       >
         {session ? 'My Profile' : 'Sign In'}
       </Link>

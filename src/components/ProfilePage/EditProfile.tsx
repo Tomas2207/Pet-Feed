@@ -135,14 +135,14 @@ const EditProfile = ({ profile, setOpenForm }: Props) => {
         />
         <div className="flex justify-around gap-2 mb-2">
           <button
-            className="bg-neutral-300 flex-1 rounded-md"
+            className="border border-neutral-300 flex-1 rounded-md hover:bg-neutral-200"
             onClick={(e) => setOpenForm(false)}
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="bg-teal-600 flex-1 py-2 rounded-md text-white"
+            className="bg-teal-600 flex-1 py-2 rounded-md text-white hover:brightness-110"
           >
             Accept
           </button>

@@ -30,6 +30,7 @@ import { toast } from 'react-hot-toast';
 import { FacebookIcon, FacebookShareButton } from 'react-share';
 import ShareSection from './ShareSection';
 import { Comment as CommentType } from '../../../utils/types';
+import Description from './Description';
 
 TimeAgo.addDefaultLocale(en);
 
@@ -232,7 +233,8 @@ const SinglePic = ({ pic, changePic, fetchPosts }: Props) => {
           />
         ) : null}
       </div>
-      <p className="text-md px-4 pb-4 break-all">{pic.description}</p>
+      {/* <p className="text-md px-4 pb-4 break-all">{pic.description}</p> */}
+      <Description description={pic.description} />
       {pic.img ? (
         <div className="relative overflow-hidden sm:mx-2 sm:rounded-md">
           <img

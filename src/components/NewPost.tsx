@@ -79,9 +79,10 @@ const NewPost = ({ open, fetchPosts }: Props) => {
         }),
         headers: { 'Content-type': 'application/json' },
       });
+
+      fetchPosts();
       open(false);
       setDisableBtn(false);
-      fetchPosts();
     } catch (error) {
       console.error(error);
     }
@@ -117,42 +118,49 @@ const NewPost = ({ open, fetchPosts }: Props) => {
           {/* Upload file */}
           <form onSubmit={handleSubmitFile} className="flex flex-col gap-5">
             <div className="flex items-center">
-              <input
+              <textarea
+                className="px-2 py-2 outline-none flex-1 whitespace-pre-wrap"
+                placeholder="Something in mind?"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                autoFocus
+              />
+              {/* <input
                 type="text"
                 autoFocus
                 className="px-2 py-2 outline-none flex-1"
                 placeholder="Something in mind?"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-              />
-              <BsFillEmojiLaughingFill
-                className="text-neutral-500 text-xl cursor-pointer"
-                onClick={() => setShowEmojis(!showEmojis)}
-              />
-              {showEmojis ? (
-                <div className="absolute top-40 right-0 z-[99]">
-                  <EmojiPicker
-                    onEmojiClick={(emojiData, e) => addEmoji(e, emojiData)}
-                  />
-                </div>
-              ) : null}
+              /> */}
             </div>
             <div className="flex mb-2 items-center justify-between gap-2">
               {/* Image & Video buttons */}
-              <div className="flex items-center justify-between my-1 gap-4">
+              <div className="flex items-center justify-between my-1 gap-4 relative">
+                <BsFillEmojiLaughingFill
+                  className="text-neutral-500 text-xl cursor-pointer ml-2"
+                  onClick={() => setShowEmojis(!showEmojis)}
+                />
+                {showEmojis ? (
+                  <div className="absolute top-10 left-0 z-[99]">
+                    <EmojiPicker
+                      onEmojiClick={(emojiData, e) => addEmoji(e, emojiData)}
+                    />
+                  </div>
+                ) : null}
                 <label
                   htmlFor="image"
-                  className="flex items-center w-28 h-10 justify-center rounded-xl gap-1 bg-neutral-200 px-2 text-neutral-800 cursor-pointer"
+                  className="flex items-center w-fit h-10 justify-center rounded-xl gap-1 border border-neutral-300 px-2 text-neutral-800 cursor-pointer group"
                 >
-                  <MdInsertPhoto className="text-4xl text-teal-500" />
-                  Photo
+                  <MdInsertPhoto className="text-4xl text-teal-500 group-hover:scale-75 transition duration-150 ease-in-out" />
+                  <p className="hidden sm:block">Photo</p>
                 </label>
                 <label
                   htmlFor="video"
-                  className="flex items-center w-28 h-10 justify-center rounded-xl gap-1 bg-neutral-200 px-2 text-neutral-800 cursor-pointer"
+                  className="flex items-center w-fit h-10 justify-center rounded-xl gap-1 border border-neutral-300 px-2 text-neutral-800 cursor-pointer group"
                 >
-                  <RiVideoFill className="text-4xl text-blue-500" />
-                  Video
+                  <RiVideoFill className="text-4xl text-blue-500 group-hover:scale-75 transition duration-150 ease-in-out" />
+                  <p className="hidden sm:block">Video</p>
                 </label>
               </div>
 
@@ -178,7 +186,7 @@ const NewPost = ({ open, fetchPosts }: Props) => {
                 type="submit"
                 className={
                   !disableBtn
-                    ? 'bg-black text-white rounded-md px-2 h-10 flex-1'
+                    ? 'bg-black text-white rounded-md px-2 h-10 flex-1 hover:bg-neutral-800 transition duration-150 ease-in-out'
                     : 'bg-black text-white rounded-md px-2 h-10 bg-opacity-30 flex-1'
                 }
                 disabled={disableBtn}

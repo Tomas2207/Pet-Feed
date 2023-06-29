@@ -159,7 +159,7 @@ const ProfileInfo = ({ profile }: Profile) => {
             <div className="bg-neutral-300 h-[1px] my-2" />
             {myProfile ? (
               <button
-                className="bg-teal-600 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 pr-2"
+                className="bg-teal-600 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 pr-2 hover:brightness-110"
                 onClick={(e) => setOpenForm(true)}
               >
                 <p>Edit Profile</p>
@@ -175,7 +175,7 @@ const ProfileInfo = ({ profile }: Profile) => {
                   <div>
                     {following ? (
                       <button
-                        className="bg-teal-600 text-white px-4 py-2 rounded-lg w-full"
+                        className="bg-teal-600 text-white px-4 py-2 rounded-lg w-full hover:brightness-110"
                         onClick={() => removeFollowing(profile._id)}
                       >
                         Following

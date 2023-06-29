@@ -34,7 +34,7 @@ const AddPost = ({ setOpenNewPost }: Props) => {
       </div>
       <div className="w-full">
         <button
-          className="px-2 h-12 border rounded-xl flex-1 bg-teal-600 text-white w-full mt-1"
+          className="px-2 h-12 border rounded-xl flex-1 bg-teal-600 text-white w-full mt-1 hover:brightness-110 transition duration-150"
           onClick={handleCreatePostBtn}
         >
           Create Post
@@ -42,24 +42,24 @@ const AddPost = ({ setOpenNewPost }: Props) => {
         <div className="flex items-center justify-between my-1 gap-2">
           <div
             onClick={handleCreatePostBtn}
-            className="flex items-center mt-2 w-28 h-10 justify-center rounded-xl gap-1 bg-neutral-200 px-2 text-neutral-700 cursor-pointer hover:bg-opacity-70"
+            className="flex items-center mt-2 w-28 h-10 justify-center rounded-xl gap-1 border border-neutral-300 px-2 text-neutral-700 cursor-pointer hover:bg-opacity-70 group"
           >
-            <MdInsertPhoto className="text-4xl text-teal-500" />
-            <p className="hidden sm:block">Photo</p>
+            <MdInsertPhoto className="text-4xl text-teal-500 group-hover:scale-75 transition duration-150 ease-in-out" />
+            <p className="hidden sm:block ">Photo</p>
           </div>
           <div
             onClick={handleCreatePostBtn}
-            className="flex items-center mt-2 w-28 h-10 justify-center rounded-xl gap-1 bg-neutral-200 px-2 text-neutral-700 cursor-pointer hover:bg-opacity-70"
+            className="flex items-center mt-2 w-28 h-10 justify-center rounded-xl gap-1 border border-neutral-300 px-2 text-neutral-700 cursor-pointer hover:bg-opacity-70 group"
           >
-            <RiVideoFill className="text-4xl text-blue-500" />
+            <RiVideoFill className="text-4xl text-blue-500 group-hover:scale-75 transition duration-150 ease-in-out" />
             <p className="hidden sm:block">Video</p>
           </div>
-          <div className="flex items-center mt-2 w-28 h-10 justify-center rounded-xl gap-1 bg-neutral-200 px-2 text-neutral-700 cursor-pointer hover:bg-opacity-70">
-            <FaPollH className="text-3xl text-orange-500" />
+          <div className="flex items-center mt-2 w-28 h-10 justify-center rounded-xl gap-1 border border-neutral-300 px-2 text-neutral-700 cursor-pointer hover:bg-opacity-70 group">
+            <FaPollH className="text-3xl text-orange-500 group-hover:scale-75 transition duration-150 ease-in-out" />
             <p className="hidden sm:block">Poll</p>
           </div>
-          <div className="flex items-center mt-2 w-28 h-10 justify-center rounded-xl gap-1 bg-neutral-200 px-2 text-neutral-700 cursor-pointer hover:bg-opacity-70">
-            <MdArticle className="text-4xl text-pink-400" />
+          <div className="flex items-center mt-2 w-28 h-10 justify-center rounded-xl gap-1 border border-neutral-300 px-2 text-neutral-700 cursor-pointer hover:bg-opacity-70 group">
+            <MdArticle className="text-4xl text-pink-400 group-hover:scale-75 transition duration-150 ease-in-out" />
             <p className="hidden sm:block">Article</p>
           </div>
         </div>
