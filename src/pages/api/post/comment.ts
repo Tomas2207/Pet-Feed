@@ -18,7 +18,7 @@ export default async function handler(
       newComment.comments.push({
         author: req.body.author,
         content: req.body.content,
-        createdAt: Date.now(),
+        createdAt: new Date(Date.now()),
       });
 
       await newComment.save();
