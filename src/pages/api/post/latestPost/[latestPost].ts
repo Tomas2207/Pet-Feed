@@ -17,8 +17,8 @@ export default async function handler(
 
       let lastPost = await Post.findOne({ userId: id })
         .sort({ $natural: -1 })
-        .populate({ path: 'userId', model: 'User' })
-        .populate({ path: 'likes', model: 'User' });
+        .populate({ path: 'userId', model: 'users' })
+        .populate({ path: 'likes', model: 'users' });
 
       res.json({ lastPost });
       break;

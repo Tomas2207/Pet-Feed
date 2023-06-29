@@ -26,7 +26,7 @@ export default async function handler(
 
       newComment = await Post.findById(req.body.postId).populate({
         path: 'comments.author',
-        model: 'User',
+        model: 'users',
       });
 
       res.json({ newComment: newComment.comments });

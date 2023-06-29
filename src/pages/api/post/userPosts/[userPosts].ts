@@ -15,9 +15,9 @@ export default async function handler(
       const id = new ObjectId(req.query.userPosts as string);
 
       let userPosts = await Post.find({ userId: id })
-        .populate({ path: 'userId', model: 'User' })
-        .populate({ path: 'comments.author', model: 'User' })
-        .populate({ path: 'likes', model: 'User' });
+        .populate({ path: 'userId', model: 'users' })
+        .populate({ path: 'comments.author', model: 'users' })
+        .populate({ path: 'likes', model: 'users' });
 
       res.json({ userPosts });
       break;
