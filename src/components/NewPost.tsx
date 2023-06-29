@@ -197,7 +197,7 @@ const NewPost = ({ open, fetchPosts }: Props) => {
           </form>
           {/* ----------- */}
           {previewSource ? (
-            <div className="h-[30rem] w-[28rem] relative rounded-md overflow-hidden flex j1ustify-center items-center text-4xl text-white font-bold">
+            <div className="h-[30rem] sm:w-[28rem] relative rounded-md overflow-hidden flex j1ustify-center items-center text-4xl text-white font-bold">
               <Image
                 src={previewSource}
                 fill
@@ -207,7 +207,7 @@ const NewPost = ({ open, fetchPosts }: Props) => {
             </div>
           ) : null}
           {videoSrc ? (
-            <div className="h-[30rem] w-[28rem] relative rounded-md overflow-hidden flex j1ustify-center items-center text-4xl text-white font-bold">
+            <div className="h-[30rem] sm:w-[28rem] relative rounded-md overflow-hidden flex j1ustify-center items-center text-4xl text-white font-bold">
               <video
                 className="h-full w-full object-cover"
                 src={videoSrc}
