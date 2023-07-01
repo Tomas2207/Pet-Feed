@@ -244,7 +244,8 @@ const SinglePic = ({ pic, changePic, fetchPosts }: Props) => {
             onClick={() => changePic(pic.img, pic.description)}
           />
         </div>
-      ) : (
+      ) : null}
+      {pic.video ? (
         <div className="h-auto relative overflow-hidden sm:mx-2 sm:rounded-md">
           <video
             src={pic.video!}
@@ -252,7 +253,7 @@ const SinglePic = ({ pic, changePic, fetchPosts }: Props) => {
             className="object-cover h-full w-full"
           ></video>
         </div>
-      )}
+      ) : null}
       <div className="p-4 rounded-b-md">
         <div className="w-full h-[0.1px] bg-gray-500 bg-opacity-20 mb-4" />
         <div className="flex items-center text-2xl">

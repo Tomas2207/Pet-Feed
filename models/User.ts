@@ -22,6 +22,6 @@ const UserSchema = new mongoose.Schema({
   savedPosts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
 });
 
-const User = mongoose.model('User', UserSchema);
+const User = mongoose.models.User || mongoose.model('User', UserSchema);
 
 export default User;

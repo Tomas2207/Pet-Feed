@@ -13,7 +13,6 @@ const postSchema = new mongoose.Schema(
     },
     image_public_id: {
       type: String,
-      required: true,
     },
     video: {
       type: String,
@@ -36,6 +35,6 @@ const postSchema = new mongoose.Schema(
   }
 );
 
-const Post = mongoose.model('Post', postSchema);
+const Post = mongoose.models.Post || mongoose.model('Post', postSchema);
 
 export default Post;

@@ -38,6 +38,7 @@ type Props = {
 const Index = ({ serverPosts, users }: Props) => {
   const { data: session, update } = useSession();
   const [posts, setPosts] = useState(serverPosts);
+  const [loadingPost, setLoadingPost] = useState(false);
 
   const router = useRouter();
 
@@ -46,9 +47,11 @@ const Index = ({ serverPosts, users }: Props) => {
   }, [session?.user.savedPosts]);
 
   const fetchPosts = async () => {
+    setLoadingPost(true);
     const res = await fetch('/api/post');
     const fetchedPosts = await res.json();
     setPosts([...fetchedPosts.posts]);
+    setLoadingPost(false);
   };
 
   const fetchUser = async () => {
@@ -84,7 +87,7 @@ const Index = ({ serverPosts, users }: Props) => {
   const [openNewPost, setOpenNewPost] = useState(false);
   const [openZoom, setOpenZoom] = useState(false);
 
-  if (session && !session?.user.followers) return <Loading />;
+  if ((session && !session?.user.followers) || loadingPost) return <Loading />;
 
   return (
     <main className="flex flex-col items-center shadow-xl shadow-black relative min-h-screen bg-neutral-200 pb-20">

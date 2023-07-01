@@ -10,6 +10,7 @@ import { FaComment, FaPollH, FaShareAlt } from 'react-icons/fa';
 import { MdArticle, MdInsertPhoto } from 'react-icons/md';
 import { RiVideoFill } from 'react-icons/ri';
 import { RxCrossCircled } from 'react-icons/rx';
+import { resizeVideo } from '../../utils/compressFiles';
 
 type Props = {
   open: Function;
@@ -20,7 +21,7 @@ const NewPost = ({ open, fetchPosts }: Props) => {
   const [previewSource, setPreviewSource] = useState('');
   const [disableBtn, setDisableBtn] = useState(false);
   const [description, setDescription] = useState('');
-  const [videoFile, setVideoFile] = useState();
+  const [currentFile, setCurrentFile] = useState<File>();
   const [videoSrc, setVideoSrc] = useState('');
   const [showEmojis, setShowEmojis] = useState(false);
 
@@ -38,6 +39,7 @@ const NewPost = ({ open, fetchPosts }: Props) => {
     if (files && files.length > 0 && type === 'image') {
       const file = files[0];
       previewFile(file);
+      setCurrentFile(file);
     } else if (files && files.length && type === 'video') {
       const file = files[0];
 
@@ -46,6 +48,8 @@ const NewPost = ({ open, fetchPosts }: Props) => {
       reader.onloadend = () => {
         setVideoSrc(reader.result as string);
       };
+      setCurrentFile(file);
+
       // videoPreview(file);
     }
   };
@@ -58,22 +62,50 @@ const NewPost = ({ open, fetchPosts }: Props) => {
     };
   };
 
-  const handleSubmitFile = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitFile = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!previewSource && !videoSrc) return;
 
-    if (previewSource) uploadImage(previewSource, 'image');
-    else if (videoSrc) uploadImage(videoSrc, 'video');
+    if (!previewSource && !videoSrc) return;
+    setDisableBtn(true);
+    const formData = new FormData();
+    formData.append('file', currentFile);
+    formData.append('upload_preset', process.env.CLOUDINARY_UPLOAD_PRESET);
+
+    if (previewSource) {
+      const upload = await fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_NAME}/image/upload`,
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+
+      const res = await upload.json();
+      console.log(res);
+      uploadImage(res, 'image');
+    } else if (videoSrc) {
+      // uploadImage(videoSrc, 'video');
+      const upload = await fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_NAME}/video/upload`,
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+
+      const res = await upload.json();
+      console.log(res);
+      uploadImage(res, 'video');
+    }
   };
 
   const uploadImage = async (base64EncodedImage: any, type: string) => {
-    setDisableBtn(true);
     try {
       await fetch('/api/post', {
         method: 'POST',
         body: JSON.stringify({
           data: base64EncodedImage,
-          description: description,
+          description: description ? description : ' ',
           userId: session?.user.id,
           type: type,
         }),
@@ -173,6 +205,7 @@ const NewPost = ({ open, fetchPosts }: Props) => {
                 onChange={(e) => handleFileInputChange(e, 'image')}
                 hidden
                 accept="image/*"
+                disabled={disableBtn}
               />
               <input
                 type="file"
@@ -181,6 +214,7 @@ const NewPost = ({ open, fetchPosts }: Props) => {
                 onChange={(e) => handleFileInputChange(e, 'video')}
                 hidden
                 accept="video/*"
+                disabled={disableBtn}
               />
               <button
                 type="submit"

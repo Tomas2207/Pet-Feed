@@ -13,31 +13,22 @@ export default async function handler(
   switch (req.method) {
     case 'POST':
       try {
-        const fileStr = req.body.data;
+        const file = req.body.data;
 
         let newPost;
 
         if (req.body.type === 'image') {
-          const uploadedResponse = await cloudinary.uploader.upload(fileStr, {
-            folder: 'pet-media',
-          });
-
           newPost = Post.create({
             userId: req.body.userId,
-            img: uploadedResponse.secure_url,
-            image_public_id: uploadedResponse.public_id,
+            img: file.secure_url,
+            image_public_id: file.public_id,
             description: req.body.description,
           });
         } else if (req.body.type === 'video') {
-          const uploadedResponse = await cloudinary.uploader.upload(fileStr, {
-            folder: 'pet-media',
-            resource_type: 'video',
-          });
-
           newPost = Post.create({
             userId: req.body.userId,
-            video: uploadedResponse.secure_url,
-            image_public_id: uploadedResponse.public_id,
+            video: file.secure_url,
+            image_public_id: file.public_id,
             description: req.body.description,
           });
         }
