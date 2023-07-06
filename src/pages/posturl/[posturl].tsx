@@ -52,7 +52,6 @@ const Search = ({ serverPost }: Props) => {
             <SinglePic
               key={serverPost._id.toString()}
               pic={serverPost}
-              changePic={changePic}
               fetchPosts={fetchPosts}
             />
           ) : (
