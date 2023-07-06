@@ -19,6 +19,9 @@ const ExploreProfiles = ({ profiles, fetchUser }: Props) => {
   const { data: session } = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [stateProfiles, setStateProfiles] = useState(
+    profiles ? profiles.slice(0, 5) : []
+  );
 
   useEffect(() => {
     setLoading(false);
@@ -60,7 +63,7 @@ const ExploreProfiles = ({ profiles, fetchUser }: Props) => {
         Explore Profiles
       </h2>
       <div className="flex flex-col justify-around w-full gap-2">
-        {profiles.map((pic, i) => (
+        {stateProfiles.map((pic, i) => (
           <div
             key={i}
             className="flex gap-4 relative h-20 rounded-md overflow-hidden hover:h-80 transition-all duration-500 ease-in-out group"

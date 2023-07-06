@@ -3,7 +3,12 @@ import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { AiFillLike, AiOutlineComment, AiOutlineLike } from 'react-icons/ai';
+import {
+  AiFillLike,
+  AiOutlineComment,
+  AiOutlineLike,
+  AiOutlineLoading3Quarters,
+} from 'react-icons/ai';
 import { BiShareAlt } from 'react-icons/bi';
 import { BsFillEmojiLaughingFill } from 'react-icons/bs';
 import { FaComment, FaPollH, FaShareAlt } from 'react-icons/fa';
@@ -24,6 +29,7 @@ const NewPost = ({ open, fetchPosts }: Props) => {
   const [currentFile, setCurrentFile] = useState<File>();
   const [videoSrc, setVideoSrc] = useState('');
   const [showEmojis, setShowEmojis] = useState(false);
+  const [fileTooLarge, setFileTooLarge] = useState(false);
 
   const router = useRouter();
 
@@ -33,6 +39,10 @@ const NewPost = ({ open, fetchPosts }: Props) => {
     e: React.FormEvent<HTMLInputElement>,
     type: string
   ) => {
+    setPreviewSource('');
+    setVideoSrc('');
+    setFileTooLarge(false);
+
     const fileInput = e.target as HTMLInputElement;
     const files = fileInput.files;
 
@@ -40,6 +50,13 @@ const NewPost = ({ open, fetchPosts }: Props) => {
       const file = files[0];
       previewFile(file);
       setCurrentFile(file);
+
+      let size = (file.size / (1024 * 1024)).toFixed(2);
+      console.log('size', size, 'mb');
+      if (parseFloat(size) > 80) {
+        console.log('file too large');
+        setFileTooLarge(true);
+      }
     } else if (files && files.length && type === 'video') {
       const file = files[0];
 
@@ -49,7 +66,12 @@ const NewPost = ({ open, fetchPosts }: Props) => {
         setVideoSrc(reader.result as string);
       };
       setCurrentFile(file);
-
+      let size = (file.size / (1024 * 1024)).toFixed(2);
+      console.log('size', size, 'mb');
+      if (parseFloat(size) > 80) {
+        console.log('file too large');
+        setFileTooLarge(true);
+      }
       // videoPreview(file);
     }
   };
@@ -65,7 +87,7 @@ const NewPost = ({ open, fetchPosts }: Props) => {
   const handleSubmitFile = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!previewSource && !videoSrc) return;
+    if ((!previewSource && !videoSrc) || fileTooLarge) return;
     setDisableBtn(true);
     const formData = new FormData();
     formData.append('file', currentFile);
@@ -143,7 +165,7 @@ const NewPost = ({ open, fetchPosts }: Props) => {
             </div>
             <RxCrossCircled
               className="bg-white text-4xl rounded-full cursor-pointer transition duration-1000 hover:rotate-180 mr-0 ml-auto"
-              onClick={() => open(false)}
+              onClick={() => (currentFile && disableBtn ? '' : open(false))}
             />
           </div>
 
@@ -157,14 +179,6 @@ const NewPost = ({ open, fetchPosts }: Props) => {
                 onChange={(e) => setDescription(e.target.value)}
                 autoFocus
               />
-              {/* <input
-                type="text"
-                autoFocus
-                className="px-2 py-2 outline-none flex-1"
-                placeholder="Something in mind?"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              /> */}
             </div>
             <div className="flex mb-2 items-center justify-between gap-2">
               {/* Image & Video buttons */}
@@ -173,7 +187,7 @@ const NewPost = ({ open, fetchPosts }: Props) => {
                   className="text-neutral-500 text-xl cursor-pointer ml-2"
                   onClick={() => setShowEmojis(!showEmojis)}
                 />
-                {showEmojis ? (
+                {showEmojis && !disableBtn ? (
                   <div className="absolute top-10 left-0 z-[99]">
                     <EmojiPicker
                       onEmojiClick={(emojiData, e) => addEmoji(e, emojiData)}
@@ -225,10 +239,19 @@ const NewPost = ({ open, fetchPosts }: Props) => {
                 }
                 disabled={disableBtn}
               >
-                Post
+                {currentFile && disableBtn ? (
+                  <AiOutlineLoading3Quarters className="mx-auto text-2xl animate-spin" />
+                ) : (
+                  'Post'
+                )}
               </button>
             </div>
           </form>
+          {fileTooLarge ? (
+            <div className="text-red-600">
+              File too large, should be less than 80mb
+            </div>
+          ) : null}
           {/* ----------- */}
           {previewSource ? (
             <div className="h-[30rem] sm:w-[28rem] relative rounded-md overflow-hidden flex j1ustify-center items-center text-4xl text-white font-bold">

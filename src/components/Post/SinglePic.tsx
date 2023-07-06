@@ -56,10 +56,9 @@ type Props = {
     comments: Comment[];
   };
   fetchPosts: Function;
-  changePic: Function;
 };
 
-const SinglePic = ({ pic, changePic, fetchPosts }: Props) => {
+const SinglePic = ({ pic, fetchPosts }: Props) => {
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -237,12 +236,7 @@ const SinglePic = ({ pic, changePic, fetchPosts }: Props) => {
       <Description description={pic.description} />
       {pic.img ? (
         <div className="relative overflow-hidden sm:mx-2 sm:rounded-md">
-          <img
-            src={pic.img}
-            className="object-cover mx-auto"
-            alt="post"
-            onClick={() => changePic(pic.img, pic.description)}
-          />
+          <img src={pic.img} className="object-cover mx-auto" alt="post" />
         </div>
       ) : null}
       {pic.video ? (

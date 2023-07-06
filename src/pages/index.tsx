@@ -111,12 +111,7 @@ const Index = ({ serverPosts, users }: Props) => {
 
           <div className="flex flex-col w-full items-center gap-6">
             {posts.map((pic, i) => (
-              <SinglePic
-                key={i}
-                pic={pic}
-                changePic={changePic}
-                fetchPosts={fetchPosts}
-              />
+              <SinglePic key={i} pic={pic} fetchPosts={fetchPosts} />
             ))}
           </div>
           {/* -------- */}

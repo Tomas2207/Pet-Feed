@@ -47,7 +47,6 @@ type Profile = {
 
 export default function ProfilePage({ profile, serverPosts }: Profile) {
   const [currentPic, setCurrentPic] = useState({ src: '', desc: '' });
-  const [openZoom, setOpenZoom] = useState(false);
   const { data: session } = useSession();
   const [posts, setPosts] = useState(serverPosts);
   const router = useRouter();
@@ -65,24 +64,10 @@ export default function ProfilePage({ profile, serverPosts }: Profile) {
     setPosts(fetchedPosts.userPosts.reverse());
   };
 
-  const changePic = (src: string, desc: string) => {
-    setOpenZoom(true);
-    setCurrentPic({
-      src,
-      desc,
-    });
-  };
-
   return (
     <main className="flex flex-col items-center shadow-xl shadow-black relative bg-neutral-200 min-h-screen pb-20">
       <Navbar />
-      {openZoom ? (
-        <ZoomPic
-          src={currentPic.src}
-          desc={currentPic.desc}
-          open={setOpenZoom}
-        />
-      ) : null}
+
       <div className="w-full sm:w-auto flex flex-col lg:flex-row gap-6">
         <ProfileInfo profile={user} />
 
@@ -121,11 +106,7 @@ export default function ProfilePage({ profile, serverPosts }: Profile) {
               <div className="gap-1 2xl:columns-2 space-y-4 h-fit">
                 {posts.map((pic, i) => (
                   <div key={i} className="break-inside-avoid-column">
-                    <SinglePic
-                      pic={pic}
-                      changePic={changePic}
-                      fetchPosts={fetchPosts}
-                    />
+                    <SinglePic pic={pic} fetchPosts={fetchPosts} />
                   </div>
                 ))}
               </div>
@@ -140,11 +121,7 @@ export default function ProfilePage({ profile, serverPosts }: Profile) {
               <div className="gap-1 2xl:columns-2 space-y-4 h-fit">
                 {savedPosts.map((pic, i) => (
                   <div key={i} className="break-inside-avoid-column">
-                    <SinglePic
-                      pic={pic}
-                      changePic={changePic}
-                      fetchPosts={fetchPosts}
-                    />
+                    <SinglePic pic={pic} fetchPosts={fetchPosts} />
                   </div>
                 ))}
               </div>

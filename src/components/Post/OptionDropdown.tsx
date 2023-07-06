@@ -57,14 +57,18 @@ const OptionDropdown = ({ id, setOpenDropdown, userId }: Props) => {
             <BsFillFlagFill />
             Report
           </button>
-          {userId === session.user.id ? (
-            <button
-              className="p-2 hover:bg-neutral-700 w-full text-start flex items-center gap-2"
-              onClick={deletePost}
-            >
-              <AiFillDelete />
-              Delete Post
-            </button>
+          {session ? (
+            <>
+              {userId === session.user.id ? (
+                <button
+                  className="p-2 hover:bg-neutral-700 w-full text-start flex items-center gap-2"
+                  onClick={deletePost}
+                >
+                  <AiFillDelete />
+                  Delete Post
+                </button>
+              ) : null}
+            </>
           ) : null}
         </>
       )}
