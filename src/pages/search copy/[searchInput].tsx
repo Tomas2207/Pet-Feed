@@ -41,10 +41,6 @@ const Search = ({ serverUsers, serverPosts }: Props) => {
   const [users, setUsers] = useState(serverUsers);
   const [loading, setLoading] = useState(false);
 
-  const changePic = (src: string, desc: string) => {
-    console.log('yes');
-  };
-
   useEffect(() => {
     fetchPosts();
   }, [router.query.searchInput]);
@@ -80,12 +76,7 @@ const Search = ({ serverUsers, serverPosts }: Props) => {
           {posts.length > 0 ? (
             <div className="flex flex-col w-full items-center gap-4">
               {posts.map((pic, i) => (
-                <SinglePic
-                  key={i}
-                  pic={pic}
-                  changePic={changePic}
-                  fetchPosts={fetchPosts}
-                />
+                <SinglePic key={i} pic={pic} fetchPosts={fetchPosts} />
               ))}
             </div>
           ) : (

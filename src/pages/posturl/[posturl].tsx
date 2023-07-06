@@ -30,10 +30,6 @@ const Search = ({ serverPost }: Props) => {
     console.log('-');
   };
 
-  const changePic = () => {
-    console.log('.');
-  };
-
   return (
     <main className="flex flex-col shadow-xl shadow-black relative min-h-screen bg-neutral-200 pb-20">
       <Navbar />
