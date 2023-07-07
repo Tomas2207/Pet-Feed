@@ -67,6 +67,7 @@ const SinglePic = ({ pic, fetchPosts }: Props) => {
   const [openDropdown, setOpenDropdown] = useState(false);
   const [showShare, setShowShare] = useState(false);
   const [currentComments, setCurrentComments] = useState<CommentType[]>([]);
+  const [displayShare, setDisplayShare] = useState(false);
 
   const [displayComments, setDisplayComments] = useState(false);
 
@@ -243,7 +244,9 @@ const SinglePic = ({ pic, fetchPosts }: Props) => {
         <div className="h-auto relative overflow-hidden sm:mx-2 sm:rounded-md">
           <video
             src={pic.video!}
+            playsInline
             controls
+            muted
             className="object-cover h-full w-full"
           ></video>
         </div>
@@ -292,11 +295,23 @@ const SinglePic = ({ pic, fetchPosts }: Props) => {
             </div>
 
             <div className="flex gap-2 items-center group h-full relative">
-              <BiShareAlt className="z-2 relative cursor-pointer hover:text-teal-600 transition duration-150" />
-              <div className="overflow-hidden w-0 group-hover:w-80 transition-all duration-500">
+              <BiShareAlt
+                className="z-2 relative cursor-pointer hover:text-teal-600 transition duration-150"
+                onClick={() => setDisplayShare(!displayShare)}
+              />
+              <div className="overflow-hidden w-0 md:group-hover:w-80 transition-all duration-500">
                 <ShareSection id={pic._id.toString()} picUrl={pic.img} />
               </div>
             </div>
+          </div>
+          <div
+            className={
+              displayShare
+                ? 'absolute bottom-[-5px] flex items-center md:hidden'
+                : 'hidden'
+            }
+          >
+            <ShareSection id={pic._id.toString()} picUrl={pic.img} />
           </div>
           {loadingSave ? (
             <AiOutlineLoading3Quarters className="animate-spin text-teal-600 ml-auto" />
