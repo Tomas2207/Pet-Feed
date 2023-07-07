@@ -246,6 +246,8 @@ const SinglePic = ({ pic, fetchPosts }: Props) => {
             src={pic.video!}
             playsInline
             controls
+            autoPlay
+            loop
             muted
             className="object-cover h-full w-full"
           ></video>
