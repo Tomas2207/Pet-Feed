@@ -14,6 +14,7 @@ import { ObjectId } from 'mongodb';
 import { Author, Comment } from '../../utils/types';
 import LatestPost from '@/components/LatestPost';
 import Loading from '@/components/Loading';
+import Link from 'next/link';
 
 type Props = {
   users: {
@@ -120,6 +121,11 @@ const Index = ({ serverPosts, users }: Props) => {
         <ExploreProfiles profiles={users} fetchUser={fetchUser} />
         {/* ------------- */}
       </div>
+      <section className="bg-white h-16 w-full absolute bottom-0 flex justify-center items-center px-2 text-neutral-600 ">
+        <Link href="/privacyPolicy" className="hover:underline">
+          Privacy Policy
+        </Link>
+      </section>
     </main>
   );
 };
