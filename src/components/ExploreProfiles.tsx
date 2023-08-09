@@ -22,10 +22,15 @@ const ExploreProfiles = ({ profiles, fetchUser }: Props) => {
   const [stateProfiles, setStateProfiles] = useState(
     profiles ? profiles.slice(0, 5) : []
   );
+  const [fetching, setFetching] = useState(false);
 
   useEffect(() => {
-    setLoading(false);
-  }, [session]);
+    if (fetching === true) {
+      fetchUser();
+      setLoading(false);
+      setFetching(false);
+    }
+  }, [fetching]);
 
   const addFollowing = async (id: ObjectId) => {
     if (session) {
@@ -39,7 +44,8 @@ const ExploreProfiles = ({ profiles, fetchUser }: Props) => {
         headers: { 'Content-type': 'application/json' },
       });
 
-      fetchUser();
+      // fetchUser();
+      setFetching(true);
     } else {
       router.push('/signin');
     }
@@ -55,7 +61,7 @@ const ExploreProfiles = ({ profiles, fetchUser }: Props) => {
       headers: { 'Content-type': 'application/json' },
     });
 
-    fetchUser();
+    setFetching(true);
   };
   return (
     <div className="hidden xl:block h-fit min-w-[24rem] bg-white px-1 rounded-xl sticky top-20 pb-4 border border-neutral-300">
