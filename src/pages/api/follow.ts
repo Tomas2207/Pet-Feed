@@ -10,6 +10,8 @@ export default async function handler(
 ) {
   await connectMongo();
 
+  console.log(req.method);
+
   switch (req.method) {
     case 'POST':
       try {

@@ -3,6 +3,7 @@ import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { toast } from 'react-hot-toast';
 
 const Form = () => {
   const [fileInputState, setFileInputState] = useState();
@@ -45,6 +46,10 @@ const Form = () => {
   };
 
   const uploadImage = async (base64EncodedImage: any) => {
+    if (!petName || !description) {
+      toast.error('Complete your account');
+      return;
+    }
     setDisableBtn(true);
     try {
       const updateUser = await fetch('/api/user', {
